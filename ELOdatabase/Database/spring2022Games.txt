@@ -1,0 +1,651 @@
+
+
+//motm60
+speezo keller 1 2 true
+shenal rock 2 0 true
+qwest kestoro 1 2 true
+zane evan 2 0 true
+pasta p3p 2 1 true
+viber mag 2 0 true
+slawdawg peele 2 0 true
+bups keller 2 0 true
+shenal kestoro 2 0 true
+zane pasta 2 0 true
+viber slawdawg 0 2 true
+bups shenal 2 0 true
+zane slawdawg 2 0 true
+bups zane 2 3 true
+rock qwest 1 2 true
+evan p3p 0 2 true
+mag peele 0 2 true
+viber speezo 2 1 true
+pasta qwest 0 2 true
+kestoro p3p 2 0 true
+keller peele 0 2 true
+viber qwest 0 2 true
+kestoro peele 1 2 true
+shenal qwest 2 0 true
+slawdawg peele 2 0 true
+shenal slawdawg 1 2 true
+bups slawdawg 3 0 true
+zane bups 1 3 true
+bups zane 0 3 true
+
+//bibr1
+devman evan 2 0 false
+kestoro peele 2 1 false
+bups jabrias 2 0 false
+satchel rei 2 0 false
+simmons mag 2 0 false
+pasta rock 2 0 false
+ogre bobby 2 0 false
+slawdawg keller 2 0 false
+devman kestoro 2 0 false
+bups satchel 1 2 false
+simmons pasta 2 0 false
+ogre slawdawg 2 0 false
+devman satchel 3 1 false
+simmons ogre 3 0 false
+devman simmons 1 3 false
+evan peele 0 2 false
+jabrias rei 0 2 false
+mag rock 2 0 false
+bobby keller 1 2 false
+slawdawg peele 2 0 false
+pasta rei 2 0 false
+bups mag 2 0 false
+kestoro keller 0 2 false
+slawdawg pasta 3 0 false
+bups keller 3 0 false
+satchel slawdawg 3 0 false
+ogre bups 1 3 false
+satchel bups 0 3 false
+devman bups 3 1 false
+simmons devman 2 3 false
+devman simmons 2 3 false
+
+//motm61
+pelipper mag 2 0 true
+slawdawg shenal 1 2 true
+ogre chastizer 2 0 true
+pat speezo 2 0 true
+regi rock 2 0 true
+viber qwest 0 2 true
+bups kestoro 2 0 true
+zane mlmlop 2 1 true
+pelipper shenal 2 0 true
+ogre pat 2 0 true
+regi qwest 2 0 true
+bups zane 2 0 true
+pelipper ogre 2 0 true
+regi bups 2 1 true
+pelipper regi 3 1 true
+mag slawdawg 0 2 true
+chastizer speezo 2 0 true
+rock viber 0 2 true
+kestoro mlmlop 0 2 true
+zane slawdawg 2 0 true
+qwest chastizer 1 2 true
+pat viber 2 0 true
+shenal mlmlop 2 0 true
+zane chastizer 2 0 true
+pat shenal 2 0 true
+ogre zane 2 1 true
+bups pat 2 0 true
+ogre bups 0 2 true
+regi bups 2 3 true
+pelipper bups 3 0 true
+
+//BIGA
+Jabrias Bobby 2 0
+Kshrubb Evan 2 0
+Peele Mag 2 0
+Kestoro JGold 2 0
+
+Bups Jabrias 2 0
+Cam Kshrubb 2 1
+Slawdawg Peele 2 0
+Speezo Kestoro 0 2
+
+Speezo Bobby 2 0
+Peele Evan 2 0
+Kshrubb Mag 2 0
+Jabrias JGold 2 0
+
+Speezo Peele 1 2
+Kshrubb Jabrias 2 0
+
+Bups Cam 2 0
+Slawdawg Kestoro 2 0
+
+Cam Peele 2 1
+Kestoro Kshrubb 0 2
+
+Bups Slawdawg 3 1
+Slawdawg Kshrubb 3 1
+
+//motm62
+kshrubb sweatshorts 2 0 true
+jerm keller 2 0 true
+speezo evan 2 1 true
+peele cabi 2 0 true
+ibrisky mag 2 0 true
+qwest kestoro 1 2 true
+slawdawg jabrias 2 0 true
+devman kshrubb 2 0 true
+viber white 0 2 true
+zane jerm 2 0 true
+blue53 speezo 2 0 true
+regi peele 2 0 true
+truck ibrisky 2 0 true
+bups kestoro 2 0 true
+pat slawdawg 2 1 true
+devman white 2 0 true
+zane blue53 2 1 true
+regi truck 2 0 true
+bups pat 2 1 true
+devman zane 2 0 true
+regi bups 2 0 true
+devman regi 3 0 true
+ibrisky keller 2 0 true
+peele evan 2 0 true
+speezo cabi 2 0 true
+jerm mag 2 0 true
+viber qwest 2 0 true
+kshrubb jabrias 2 0 true
+kestoro slawdawg 0 2 true
+ibrisky peele 1 2 true
+speezo jerm 0 2 true
+viber kshrubb 2 0 true
+blue53 slawdawg 2 0 true
+white peele 2 0 true
+pat jerm 2 0 true
+truck viber 2 0 true
+blue53 white 2 0 true
+pat truck 0 2 true
+bups blue53 2 1 true
+zane truck 2 1 true
+bups zane 2 0 true
+regi bups 3 1 true
+devman regi 3 2 true
+
+//belk6
+Evan Petra 2 0
+Jabrias Bricc 2 0
+Bobby Mag 2 0
+Norboar JGold 2 0
+
+Bups Evan 2 0
+Peele Boks 0 2
+Slawdawg Jabrias 2 0
+Speezo Keller 2 0
+Ogre Bobby 2 0
+Jerm Jefferson 2 0
+Exposed Norboar 2 0
+Pasta Kestoro 1 2
+
+Pasta Petra 2 0
+Jefferson Bricc 2 0
+Keller Mag 2 0
+Peele JGold 2 1
+
+Norboar Pasta 2 1
+Bobby Jefferson 0 2
+Jabrias Keller 0 2
+Evan Peele 0 2
+
+Bups Boks 2 1
+Slawdawg Speezo 2 0
+Ogre Jerm 2 0
+Exposed Kestoro 2 0
+
+Speezo Norboar 2 0
+Boks Jefferson 2 0
+Kestoro Keller 0 2
+Jerm Peele 2 0
+
+Bups Slawdawg 2 1
+Ogre Exposed 2 1
+
+Speezo Boks 1 2
+Keller Jerm 0 2
+
+Bups Ogre 3 0
+
+Exposed Boks 2 0
+Slawdawg Jerm 2 0
+
+Exposed Slawdawg 2 0
+
+Ogre Exposed 3 1
+
+Bups Ogre 3 2
+
+//motm63
+qwest ibrisky 0 2 true
+mlmlop jabrias 2 0 true
+walterjr mag 2 0 true
+slawdawg kestoro 2 0 true
+viber peele 0 2 true
+devman ibrisky 2 0 true
+mlmlop walterjr 2 1 true
+bups slawdawg 2 0 true
+pat peele 2 0 true
+devman mlmlop 2 0 true
+bups pat 2 0 true
+devman bups 3 0 true
+jabrias mag 2 1 true
+peele qwest 2 0 true
+slawdawg jabrias 2 0 true
+walterjr kestoro 2 0 true
+ibrisky viber 1 2 true
+peele slawdawg 0 2 true
+walterjr viber 2 0 true
+mlmlop slawdawg 1 2 true
+pat walterjr 0 2 true
+slawdawg walterjr 0 2 true
+bups walterjr 3 2 true
+devman bups 2 3 true
+bups devman 1 3 true
+
+//pandemicPanic8
+norboar geoux 0 2 true
+shenal kestoro 1 2 true
+mlmlop rock 2 0 true
+subie walterjr 1 2 true
+bups kestoro 2 0 true
+ogre mlmlop 2 0 true
+bups ogre 2 1 true
+mlmlop norboar 2 0 true
+subie shenal 2 0 true
+geoux rock 2 0 true
+kestoro mlmlop 0 2 true
+subie geoux 0 2 true
+walterjr mlmlop 0 2 true
+ogre geoux 2 1 true
+mlmlop ogre 0 2 true
+bups ogre 3 2 true
+
+//bibr2
+Peele ImDolfin 2 1
+Sakbal Keller 2 0
+Slawdawg Mag 2 0
+Jefferson Wiige 0 2
+Boltman JGold 2 0
+Norboar Speezo 0 2
+Jerm Jabrias 2 0
+Kestoro Utensil 1 2
+Pasta Rock 2 0
+
+Keller Mag 2 1
+
+Pelipper Peele 2 0
+Sakbal Slawdawg 2 1
+Satchel Wiige 2 0
+Bups Boltman 2 0
+Simmons Speezo 2 0
+Polecat Jerm 2 0
+devMan Utensil 2 0
+Exposed Pasta 2 0
+
+Pasta ImDolfin 2 0
+Utensil Keller 2 0
+Jerm Jefferson 2 0
+Speezo JGold 2 0
+Boltman Norboar 2 0
+Wiige Jabrias 2 0
+Slawdawg Kestoro 2 0
+Peele Rock 2 1
+
+Pelipper Sakbal 2 0
+Satchel Bups 2 1
+Simmons Polecat 3 0
+devMan Exposed 2 0
+
+Pasta Utensil 0 2
+Jerm Speezo 2 0
+Boltman Wiige 2 1
+Slawdawg Peele 2 0
+
+Pelipper Satchel 3 0
+Simmons devMan 3 0
+
+Bups Utensil 2 0
+Sakbal Jerm 2 0
+Exposed Boltman 2 0
+Polecat Slawdawg 2 1
+
+Pelipper Simmons 2 3
+
+Bups Sakbal 3 2
+Exposed Polecat 0 3
+
+devMan Bups 3 1
+Satchel Polecat 0 3
+
+devMan Polecat 0 3
+
+Pelipper Polecat 3 1
+
+Simmons Pelipper 3 1
+
+//bibr2-buster-bracket
+Jgold rock 1 2
+norboar jabrias 0 2
+joe imdolfin 2 1
+keller rock 2 1
+jabrias joe 0 2
+norboar imdolfin 0 2
+jabrias jgold 2 1
+rock imdolfin 0 2
+keller joe 0 3
+jabrias imdolfin 0 2
+keller imdolfin 1 3
+joe imdolfin 2 3
+imdolfin joe 1 3
+
+//belk7
+P3P Jabrias 2 0
+JGold SMM 2 0
+Mag Marge 2 0
+
+Bups P3P 2 0
+Speezo Peele 2 1
+Jerm Bricc 2 0
+Pasta Keller 2 0
+Exposed JGold 2 0
+Kestoro Jefferson 2 1
+Slawdawg Mag 2 0
+Kshrubb Pineapple 2 0
+
+Pineapple Jabrias 2 0
+Keller SMM 2 0
+Peele Marge 2 0
+
+Mag Pineapple 0 2
+Jefferson JGold 1 2
+Bricc Keller 0 2
+P3P Peele 0 2
+
+Bups Speezo 2 1
+Jerm Pasta 2 0
+Exposed Kestoro 2 0
+Slawdawg Kshrubb 2 1
+
+Pasta Pineapple 2 0
+Speezo JGold 2 0
+Kshrubb Keller 2 0
+Kestoro Peele 0 2
+
+Bups Jerm 2 0
+Exposed Slawdawg 2 0
+
+Pasta Speezo 1 2
+Kshrubb Peele 2 1
+
+Bups Exposed 3 2
+
+Slawdawg Speezo 2 0
+Jerm Kshrubb 0 2
+
+Slawdawg Kshrubb 3 1
+Exposed Slawdawg 3 1
+Exposed Bups 3 2
+Exposed Bups 3 0
+
+//motm64
+kestoro jefferson 2 0 true
+slawdawg mericc 2 0 true
+ibrisky peele 2 0 true
+jerm mag 2 0 true
+regi kestoro 2 0 true
+zane slawdawg 2 0 true
+blackchris ibrisky 2 0 true
+bups jerm 2 0 true
+regi zane 2 0 true
+blackchris bups 2 0 true
+regi blackchris 3 2 true
+jerm jefferson 2 0 true
+ibrisky mericc 2 0 true
+slawdawg peele 2 0 true
+kestoro mag 2 0 true
+jerm ibrisky 0 2 true
+slawdawg kestoro 2 0 true
+zane ibrisky 2 0 true
+bups slawdawg 2 1 true
+zane bups 1 2 true
+blackchris bups 3 0 true
+
+//PandemicPanic9
+rock foolishfo0l 0 2 true
+chastizer evan 2 0 true
+harrison foolishfo0l 2 0 true
+peele kestoro 2 0 true
+walterjr chastizer 2 0 true
+kshrubb pasta 2 0 true
+harrison peele 2 0 true
+walterjr kshrubb 2 0 true
+harrison walterjr 3 1 true
+pasta rock 2 1 true
+kestoro evan 2 0 true
+chastizer pasta 1 2 true
+foolishfo0l kestoro 2 1 true
+peele pasta 2 0 true
+kshrubb foolishfo0l 2 0 true
+peele kshrubb 1 2 true
+walterjr kshrubb 2 3 true
+harrison kshrubb 3 0 true
+
+//motm65
+keller qwest 0 2 true
+kshrubb rei 2 0 true
+pasta bobby 2 0 true
+walterjr balz 2 0 true
+kestoro jgold 2 0 true
+mlmlop mag 2 0 true
+peele jabrias 2 0 true
+zane qwest 2 0 true
+kshrubb pasta 2 0 true
+walterjr kestoro 2 0 true
+mlmlop peele 2 0 true
+zane kshrubb 2 1 true
+walterjr mlmlop 0 2 true
+zane mlmlop 2 3 true
+rei bobby 2 0 true
+balz jgold 2 0 true
+mag jabrias 2 0 true
+peele keller 2 1 true
+kestoro rei 2 0 true
+pasta balz 2 0 true
+qwest mag 2 0 true
+peele kestoro 2 1 true
+pasta qwest 1 2 true
+kshrubb peele 1 2 true
+walterjr qwest 2 0 true
+peele walterjr 0 2 true
+zane walterjr 2 3 true
+mlmlop walterjr 2 3 true
+walterjr mlmlop 2 3 true
+
+//bibr3
+peele utensil 0 2 false
+truck jabrias 2 0 false
+ethereal p3p 2 0 false
+bups evan 2 0 false
+shenal pasta 2 1 false
+exposed mag 2 0 false
+mlmlop kestoro 2 0 false
+jerm don 2 0 false
+satchel rei 2 0 false
+sakbal rock 2 0 false
+slawdawg norboar 2 0 false
+zane lipsun 2 0 false
+walterjr keller 2 0 false
+simmons utensil 2 0 false
+truck ethereal 1 2 false
+bups shenal 2 0 false
+exposed mlmlop 2 0 false
+devman jerm 2 0 false
+satchel sakbal 2 0 false
+regi slawdawg 2 0 false
+zane walterjr 2 0 false
+simmons ethereal 2 1 false
+bups exposed 2 0 false
+devman satchel 2 1 false
+regi zane 2 0 false
+simmons bups 3 0 false
+devman regi 3 0 false
+simmons devman 3 0 false
+jabrias p3p 0 2 false
+evan pasta 0 2 false
+mag kestoro 0 2 false
+rei rock 0 2 false
+lipsun keller 0 2 false
+walterjr peele 2 0 false
+slawdawg p3p 2 0 false
+sakbal pasta 2 1 false
+jerm kestoro 1 2 false
+mlmlop don 2 0 false
+shenal rock 2 1 false
+truck norboar 2 0 false
+utensil keller 2 0 false
+walterjr slawdawg 2 1 false
+sakbal kestoro 2 0 false
+mlmlop shenal 2 0 false
+truck utensil 2 0 false
+exposed walterjr 2 1 false
+ethereal sakbal 2 1 false
+zane mlmlop 1 2 false
+satchel truck 1 2 false
+exposed ethereal 2 3 false
+mlmlop truck 0 3 false
+regi ethereal 3 2 false
+bups truck 2 3 false
+regi truck 3 1 false
+devman regi 3 2 false
+simmons devman 3 1 false
+
+//bibr3-buster-bracket
+mag lipsun 0 2 false
+jabrias rei 0 2 false
+pasta lipsun 2 0 false
+rock p3p 1 2 false
+peele rei 2 0 false
+norboar evan 2 0 false
+pasta p3p 2 0 false
+peele norboar 2 0 false
+pasta peele 0 3 false
+evan mag 1 2 false
+rock jabrias 2 0 false
+rei mag 2 0 false
+lipsun rock 0 2 false
+p3p rei 0 2 false
+norboar rock 0 2 false
+rei rock 0 2 false
+pasta rock 3 0 false
+peele pasta 3 0 false
+
+//motm66
+bups mag 2 0 true
+kshrubb speezo 2 1 true
+mlmlop johnny 1 2 true
+viber kestoro 0 2 true
+zane jabrias 2 0 true
+jerm qwest 2 0 true
+blue53 jgold 2 0 true
+slawdawg peele 2 0 true
+bups kshrubb 2 0 true
+johnny kestoro 1 2 true
+zane jerm 2 0 true
+blue53 slawdawg 2 1 true
+bups kestoro 2 0 true
+zane blue53 2 0 true
+bups zane 3 0 true
+mag speezo 0 2 true
+mlmlop viber 2 1 true
+jabrias qwest 0 2 true
+jgold peele 0 2 true
+slawdawg speezo 2 0 true
+jerm mlmlop 2 0 true
+kshrubb peele 2 0 true
+slawdawg jerm 2 0 true
+qwest kshrubb 0 2 true
+kestoro slawdawg 0 2 true
+blue53 kshrubb 2 0 true
+slawdawg blue53 0 2 true
+zane blue53 3 1 true
+bups zane 2 3 true
+zane bups 1 3 true
+
+//bibr4
+evan whoskite 2 0 false
+jabrias jose_cuervo 1 2 false
+keller ivever 2 1 false
+timmy lipsun 2 0 false
+baconmachete mag 2 0 false
+simmons evan 2 0 false
+shenal bongobeat 0 2 false
+truck kestoro 2 0 false
+satchel cam 2 0 false
+duk jose_cuervo 2 0 false
+sakbal ibrisky 2 0 false
+regi keller 2 0 false
+zane sweatshorts 2 0 false
+isles timmy 2 0 false
+jpegrodeo qwest 2 0 false
+ethereal peele 2 0 false
+bups jerm 2 0 false
+devman baconmachete 2 0 false
+mlmlop slawdawg 2 0 false
+truck jefferson 2 0 false
+pat kshrubb 2 0 false
+simmons bongobeat 2 0 false
+truck satchel 1 2 false
+duk sakbal 2 0 false
+regi zane 2 1 false
+isles jpegrodeo 2 0 false
+ethereal bups 2 0 false
+devman mlmlop 2 0 false
+truck pat 2 1 false
+simmons satchel 2 0 false
+duk regi 0 2 false
+isles ethereal 2 0 false
+devman truck 2 0 false
+simmons regi 2 0 false
+isles devman 3 2 false
+simmons isles 3 2 false
+kshrubb whoskite 2 0 false
+jerm jabrias 2 0 false
+qwest ivever 2 0 false
+sweatshorts lipsun 2 0 false
+cam mag 2 0 false
+jefferson kshrubb 0 2 false
+slawdawg baconmachete 2 0 false
+peele jerm 2 1 false
+timmy qwest 0 2 false
+keller sweatshorts 0 2 false
+ibrisky jose_cuervo 2 0 false
+kestoro cam 0 2 false
+shenal evan 2 0 false
+zane kshrubb 2 0 false
+sakbal slawdawg 0 2 false
+truck peele 2 1 false
+bongobeat qwest 2 0 false
+pat sweatshorts 2 0 false
+mlmlop ibrisky 2 0 false
+bups cam 2 0 false
+jpegrodeo shenal 2 0 false
+zane slawdawg 2 0 false
+truck bongobeat 1 2 false
+pat mlmlop 2 0 false
+bups jpegrodeo 1 2 false
+ethereal zane 2 1 false
+truck bongobeat 1 2 false
+satchel pat 2 0 false
+duk jpegrodeo 2 0 false
+ethereal bongobeat 3 2 false
+satchel duk 0 3 false
+regi ethereal 3 2 false
+devman duk 1 3 false
+regi duk 3 0 false
+isles regi 3 1 false
