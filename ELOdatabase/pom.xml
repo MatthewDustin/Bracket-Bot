@@ -7,10 +7,34 @@
   <description>ELO database</description>
   
   <dependencies>
+
   	<dependency>
   		<groupId>org.mongodb</groupId>
   		<artifactId>mongodb-driver-sync</artifactId>
   		<version>4.0.5</version>
   	</dependency>
+
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20090211</version>
+    </dependency>
+    <dependency>
+      <groupId>net.dv8tion</groupId>
+      <artifactId>JDA</artifactId>
+      <version>5.0.0-beta.2</version> 
+    </dependency>
   </dependencies>
+
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <version>2.5.1</version>
+      <configuration>
+        <source>1.7</source>
+        <target>1.7</target>
+      </configuration>
+    </plugin>
+  </plugins>
 </project>
