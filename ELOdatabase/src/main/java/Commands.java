@@ -9,9 +9,12 @@ import java.util.TimerTask;
 import java.awt.Color;
 import javax.security.auth.login.LoginException;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.guild.*;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Commands extends ListenerAdapter {
@@ -26,15 +29,11 @@ public class Commands extends ListenerAdapter {
 	private List<String> doneGames = new ArrayList<String>();
 	private Timer timer;
 	
-	/*private static void getMatches(String url) {
-		try {
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
+	@Override
+	public void onSlash(@NotNull SlashCommandInteractionEvent event) {
 		
-	}*/
+	}
 	
 	public void onMessageReceived(MessageReceivedEvent event) {
 		if (event.getAuthor().isBot() || event.getChannelType().isGuild()) return;

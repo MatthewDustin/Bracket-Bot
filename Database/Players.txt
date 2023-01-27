@@ -172,3 +172,4 @@ SigmaSoldier false
 dage false
 lightrook false
 scoot false
+mute true

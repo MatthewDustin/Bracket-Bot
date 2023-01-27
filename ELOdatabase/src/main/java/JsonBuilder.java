@@ -18,10 +18,13 @@ import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 
 import org.bson.Document;
 
@@ -32,9 +35,9 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.types.ObjectId;
 
 public class JsonBuilder {
-	static JSONParser jsonParser = new JSONParser();
+	static JsonParser jsonParser = new JsonParser();
 	static Object obj;
-    static JSONObject jsonTree;
+    static JsonObject jsonTree;
     static FileWriter file;
     public static int[] tourneyCounts = new int[100];
     public static int currSeason = 2;
@@ -60,6 +63,7 @@ public class JsonBuilder {
     
     public static void main(String[] args) {
     	
+    	System.out.println("Working Directory = " + System.getProperty("user.dir"));
     	try {
     		//addTourney("10974919", true);
 			remakeFile();
@@ -76,13 +80,13 @@ public class JsonBuilder {
      * returns false for wrong names or scores.
      */
     public static void simulateSet(String name1, String name2, int score1, int score2, boolean remake, boolean online) throws Exception {
-		getJSON();
+		getJson();
 		
 		StringBuilder newname1 = new StringBuilder(name1);
 		StringBuilder newname2 = new StringBuilder(name2);
 		
-		JSONObject obj1 = getPlayer(newname1);
-		JSONObject obj2 = getPlayer(newname2);
+		JsonObject obj1 = getPlayer(newname1);
+		JsonObject obj2 = getPlayer(newname2);
 		if (obj1 == null) throw new Exception(name1);
 		if (obj2 == null) throw new Exception(name2);
 		name1 = newname1.toString();
@@ -97,36 +101,36 @@ public class JsonBuilder {
 			simulateGame(name2, name1, online);
 		}
 		
-		JSONObject matchup;
-		JSONObject matchup2;
-		if ((matchup = (JSONObject) obj1.get(name2)) == null) {
-			matchup = new JSONObject();
-			matchup.put("W", score1);
-			matchup.put("L", score2);
+		JsonObject matchup;
+		JsonObject matchup2;
+		if ((matchup = (JsonObject) obj1.get(name2)) == null) {
+			matchup = new JsonObject();
+			matchup.addProperty("W", score1);
+			matchup.addProperty("L", score2);
 		} else {
-			int w = ((Number)matchup.get("W")).intValue();
-			int l = ((Number)matchup.get("L")).intValue();
-			matchup.put("W", w + score1);
-			matchup.put("L", l + score2);
+			int w = (matchup.get("W").getAsNumber()).intValue();
+			int l = (matchup.get("L").getAsNumber()).intValue();
+			matchup.addProperty("W", w + score1);
+			matchup.addProperty("L", l + score2);
 		}
-		if ((matchup2 = (JSONObject) obj2.get(name1)) == null) {
-			matchup2 = new JSONObject();
-			matchup2.put("W", score2);
-			matchup2.put("L", score1);
+		if ((matchup2 = (JsonObject) obj2.get(name1)) == null) {
+			matchup2 = new JsonObject();
+			matchup2.addProperty("W", score2);
+			matchup2.addProperty("L", score1);
 		} else {
-			int w = ((Number)matchup2.get("W")).intValue();
-			int l = ((Number)matchup2.get("L")).intValue();
-			matchup2.put("W", w + score2);
-			matchup2.put("L", l + score1);
+			int w = (matchup2.get("W").getAsNumber()).intValue();
+			int l = (matchup2.get("L").getAsNumber()).intValue();
+			matchup2.addProperty("W", w + score2);
+			matchup2.addProperty("L", l + score1);
 		}
-		obj1.put(name2, matchup);
-		obj2.put(name1, matchup2);
-		jsonTree.put(name1, obj1);
-		jsonTree.put(name2, obj2);
+		obj1.add(name2, matchup);
+		obj2.add(name1, matchup2);
+		jsonTree.add(name1, obj1);
+		jsonTree.add(name2, obj2);
 		
 		getFW();
 		closeFW();
-		if(remake) return;
+		if(remake) return; //Update the games json file for new set
 		try {
 			file = new FileWriter(gamesPath, true);
 			file.append("\n" + name1 + " " + name2 + " " + score1 + " " + score2 + " " + online);
@@ -137,26 +141,26 @@ public class JsonBuilder {
 	}
     
     public static double hotness(String name1, String name2) throws Exception {
-    	if (obj == null) getJSON();
+    	if (obj == null) getJson();
     	StringBuilder newname1 = new StringBuilder(name1);
 		StringBuilder newname2 = new StringBuilder(name2);
-		JSONObject obj1 = (JSONObject) getPlayer(newname1);
-		JSONObject obj2 = (JSONObject) getPlayer(newname2);
+		JsonObject obj1 = (JsonObject) getPlayer(newname1);
+		JsonObject obj2 = (JsonObject) getPlayer(newname2);
 		name1 = newname1.toString();
 		name2 = newname2.toString();
 		if (obj1 == null) throw new Exception(name1);
 		if (obj2 == null) throw new Exception(name2);
 		if (name1.equals(name2)) throw new Exception("duplicate");
 		
-		double winnerELO = ((Number) obj1.get("ELO")).doubleValue();
-		double loserELO = ((Number) obj2.get("ELO")).doubleValue();
-		int winnerGames = ((Number) obj1.get("games")).intValue();
-		int loserGames = ((Number) obj2.get("games")).intValue();
+		double winnerELO = obj1.get("ELO").getAsDouble();
+		double loserELO = obj2.get("ELO").getAsDouble();
+		int winnerGames = (obj1.get("games").getAsNumber()).intValue();
+		int loserGames = (obj2.get("games").getAsNumber()).intValue();
 		double eloOdds = calcELO(winnerELO, loserELO, winnerGames, loserGames, false)[2];
-		JSONObject matchup = (JSONObject) obj1.get(name2);
+		JsonObject matchup = (JsonObject) obj1.get(name2);
 		if (matchup != null) {
-			int w = ((Number)matchup.get("W")).intValue();
-			double total = w + ((Number)matchup.get("L")).doubleValue();
+			int w = (matchup.get("W").getAsNumber()).intValue();
+			double total = w + matchup.get("L").getAsDouble();
 			double realOdds = (w) / total;
 			System.out.print(realOdds + " ");
 			return 10 * (eloOdds + realOdds ) / 2; 
@@ -165,23 +169,23 @@ public class JsonBuilder {
     }
     
     public static int[] getRecord(String name1, String name2) throws Exception {
-    	getJSON();
+    	getJson();
     	StringBuilder newname1 = new StringBuilder(name1);
 		StringBuilder newname2 = new StringBuilder(name2);
-		JSONObject obj1 = (JSONObject) getPlayer(newname1);
-		JSONObject obj2 = (JSONObject) getPlayer(newname2);
+		JsonObject obj1 = (JsonObject) getPlayer(newname1);
+		JsonObject obj2 = (JsonObject) getPlayer(newname2);
 		name1 = newname1.toString();
 		name2 = newname2.toString();
 		if (obj1 == null) throw new Exception(name1);
 		if (obj2 == null) throw new Exception(name2);
 		if (name1.equals(name2)) throw new Exception("duplicate");
-		JSONObject matchup = (JSONObject) obj1.get(name2);
+		JsonObject matchup = (JsonObject) obj1.get(name2);
 		if (matchup == null) {
 			throw new Exception("none");
 		} else {
 			int[] record = new int[3];
-			record[1] = ((Number) matchup.get("W")).intValue();
-			record[2] = ((Number) matchup.get("L")).intValue();
+			record[1] = (matchup.get("W").getAsNumber()).intValue();
+			record[2] = (matchup.get("L").getAsNumber()).intValue();
 			record[0] = record[1] + record[2];
 			return record;
 		} //TODO: make this return online and offline records as well as sets
@@ -209,14 +213,14 @@ public class JsonBuilder {
     	    
     	    scanner.close();
 
-    	    JSONArray matches = (JSONArray) jsonParser.parse(inline);
+    	    JsonArray matches = jsonParser.parse(inline).getAsJsonArray();
     	    ArrayList<String[]> matchIDs = new ArrayList<String[]>();
     	    //System.out.println(Arrays.toString(matches.toArray()));
     	    //System.out.println(matches.size());
     	    for(int i = 0; i < matches.size(); ++i) {
-    	    	JSONObject o = (JSONObject) ((JSONObject) matches.get(i)).get("match");
-    	    	//System.out.println(((JSONObject) ((JSONObject) matches.get(i)).get("match")).keySet().toString());
-    	    	String[] temp = {((Number)o.get("player1_id")).toString(), ((Number)o.get("player2_id")).toString(),  ((Number)o.get("id")).toString()};
+    	    	JsonObject o = (JsonObject) ((JsonObject) matches.get(i)).get("match");
+    	    	//System.out.println(((JsonObject) ((JsonObject) matches.get(i)).get("match")).keySet().toString());
+    	    	String[] temp = {o.get("player1_id").getAsString(), o.get("player2_id").getAsString(),  o.get("id").getAsString()};
     	    	//System.out.println(Arrays.toString(temp));
     	    	matchIDs.add(temp);
     	    }
@@ -229,8 +233,8 @@ public class JsonBuilder {
     	    	conn.connect();
 
     	    	responsecode = conn.getResponseCode();
-    	    	JSONObject player1;
-    	    	JSONObject player2;
+    	    	JsonObject player1;
+    	    	JsonObject player2;
     	    	if (responsecode != 200) {
     	    		System.out.println(tournyPrefix + ID + "/participants/" + matchIDs.get(i)[0] + ".json?api_key=" + apiKey);
     	    	    throw new RuntimeException("HttpResponseCode: " + responsecode);
@@ -243,7 +247,7 @@ public class JsonBuilder {
     	    	    }
     	    	    scanner.close();
 
-    	    	    player1 = (JSONObject) ((JSONObject) jsonParser.parse(inline)).get("participant");
+    	    	    player1 = (JsonObject) ((JsonObject) jsonParser.parse(inline)).get("participant");
     	    	}
     	    	
     	    	url = new URL(tournyPrefix + ID + "/participants/" + matchIDs.get(i)[1] + ".json?api_key=" + apiKey);
@@ -262,61 +266,59 @@ public class JsonBuilder {
     	    	       inline += scanner.nextLine();
     	    	    }
     	    	    scanner.close();
-    	    	    player2 = (JSONObject) ((JSONObject) jsonParser.parse(inline)).get("participant");
+    	    	    player2 = (JsonObject) ((JsonObject) jsonParser.parse(inline)).get("participant");
     	    	}
-    	    	String[] temp = { ((String)player1.get("name")), (String)player2.get("name"), matchIDs.get(i)[2] };
+    	    	String[] temp = { (player1.get("name").getAsString()), player2.get("name").getAsString(), matchIDs.get(i)[2] };
     	    	matchIDs.set(i, temp);
     	    }
     	    return matchIDs;
     	}
-    	
     }
     
     public static boolean changePlayer(String name, String key, Object value) {
-    	if (obj == null) getJSON();
+    	if (obj == null) getJson();
     	StringBuilder n = new StringBuilder(name);
-    	JSONObject player = getPlayer(n);
+    	JsonObject player = getPlayer(n);
     	name = n.toString();
     	if (player == null) return false;
     	getFW();
-
-    	if (player.put(key, value) == null) return false;
-
-    	jsonTree.put(name, player);
+		JsonElement val = jsonParser.parse(value.toString());
+		player.add(key, val);
+    	jsonTree.add(name, player);
     	closeFW();
     	return true;
     }
 
-    public static JSONObject getPlayer(StringBuilder sb) {
+    public static JsonObject getPlayer(StringBuilder sb) {
     	String name = sb.toString().toLowerCase();
-    	if (!jsonTree.containsKey(name)) {
+    	if (!jsonTree.has(name)) {
     		String xname = name.replaceAll("\\p{Punct}", "");
-    		if (jsonTree.containsKey(xname)) {
+    		if (jsonTree.has(xname)) {
     			name = xname;
     		} else {
 				String sname = name.replaceAll("\\p{Punct}", " ");
 				for(String s : sname.split(" ")) {
-					if (jsonTree.containsKey(s)) {
+					if (jsonTree.has(s)) {
 						name = s;
 					}
 				}
     		}
 		}
-    	Object player = jsonTree.get(name);
-    	if (player instanceof String) {
-    		sb.replace(0, sb.length(), (String) player);
-    		player = jsonTree.get(player);
+    	JsonElement player = jsonTree.get(name);
+    	if (player.isJsonPrimitive()) {
+    		sb.replace(0, sb.length(), player.getAsString());
+    		player = jsonTree.get( player.getAsString());
     	} 
     	else {
     		sb.replace(0, sb.length(), name); }
-    	return (JSONObject) player;
+    	return (JsonObject) player;
     }
     /*
      * returns false if changes failed
      */
     public static boolean deletePlayer(String name) {
-    	if (obj == null) getJSON();
-    	if (!jsonTree.containsKey(name)) return false;
+    	if (obj == null) getJson();
+    	if (!jsonTree.has(name)) return false;
     	jsonTree.remove(name);
     	getFW();
     	closeFW();
@@ -327,28 +329,28 @@ public class JsonBuilder {
      * 
      */
 	public static void addPlayer(String name, boolean local, String[] aliases, boolean remake) throws Exception {
-		if (obj == null) getJSON();
-		if (jsonTree.containsKey(name)) throw new Exception(name);
+		if (obj == null) getJson();
+		if (jsonTree.has(name)) throw new Exception(name);
 		
 		for(String s : aliases) {
-			if (jsonTree.containsKey(s)) throw new Exception(s);
-			jsonTree.put(s.toLowerCase(), name);
+			if (jsonTree.has(s)) throw new Exception(s);
+			jsonTree.addProperty(s.toLowerCase(), name);
 		}
 		
 		getFW();
-		JSONObject newPlayer = new JSONObject();
-		//newPlayer.put("name", name);
-		newPlayer.put("ELO", startELO);
-		newPlayer.put("games", 0);
-		newPlayer.put("local", local);
-		newPlayer.put("ELORD", startRD);
-		newPlayer.put("ELOVol", startVol);
-		newPlayer.put("currTourney", 0);
-		newPlayer.put("lastTourney", 0);
-		jsonTree.put(name, newPlayer);
+		JsonObject newPlayer = new JsonObject();
+		//newPlayer.addProperty("name", name);
+		newPlayer.addProperty("ELO", startELO);
+		newPlayer.addProperty("games", 0);
+		newPlayer.addProperty("local", local);
+		newPlayer.addProperty("ELORD", startRD);
+		newPlayer.addProperty("ELOVol", startVol);
+		newPlayer.addProperty("currTourney", 0);
+		newPlayer.addProperty("lastTourney", 0);
+		jsonTree.add(name, newPlayer);
 		closeFW();
 		
-		getJSON();
+		getJson();
 		if (remake) return;
 		
 		FileWriter playerWrite = new FileWriter(playerPath, true);
@@ -362,30 +364,30 @@ public class JsonBuilder {
 
     public static String getRankings() {
     	List<String> list = new ArrayList<>();
-    	if (obj == null) getJSON();
-    	for (Object key : jsonTree.keySet()) {
-    		if (jsonTree.get(key) instanceof String) continue;
-    		list.add( (String) key);
+    	if (obj == null) getJson();
+    	for (String key : jsonTree.keySet()) {
+    		if (jsonTree.get(key).isJsonPrimitive()) continue;
+    		list.add( key);
     	}
     	Collections.sort(list, new Comparator<String>() {
             @Override
             public int compare(String p1, String p2) {
-               return -1 * Double.compare(((Number) ((JSONObject) jsonTree.get(p1)).get("ELO")).doubleValue(), ((Number) ((JSONObject) jsonTree.get(p2)).get("ELO")).doubleValue());
+               return -1 * Double.compare(jsonTree.getAsJsonObject(p1).get("ELO").getAsDouble(), jsonTree.getAsJsonObject(p2).get("ELO").getAsDouble());
             }
         });
     	String answer = "Current rankings: ```\n";
 
     	for(String p : list) {
-    		JSONObject pObj = (JSONObject) jsonTree.get(p);
-    		if (((Number) pObj.get("games")).intValue() >= 10 && ((boolean)(pObj.get("local")))) {
-    			answer += String.format("%-10s\t%d\n", p, ((Number)(pObj).get("ELO")).intValue());
+    		JsonObject pObj = (JsonObject) jsonTree.get(p);
+    		if ( pObj.get("games").getAsInt() >= 10 && (pObj.get("local").getAsBoolean())) {
+    			answer += String.format("%-10s\t%d\n", p, (pObj).get("ELO").getAsInt());
     		}
     	}
     	answer += "```Out of towners (their games don't affect local ELO):```\n";
     	for(String p : list) {
-    		JSONObject pObj = (JSONObject) jsonTree.get(p);
-    		if (((Number) pObj.get("games")).intValue() >= 10 && !((boolean)(pObj.get("local")))) {
-    			answer += String.format("%-10s\t%d\n", p, ((Number)(pObj).get("ELO")).intValue());
+    		JsonObject pObj = (JsonObject) jsonTree.get(p);
+    		if ( pObj.get("games").getAsInt() >= 10 && !(pObj.get("local").getAsBoolean())) {
+    			answer += String.format("%-10s\t%d\n", p, (pObj).get("ELO").getAsInt());
     		}
     	}
     	answer += "```\n";
@@ -400,10 +402,10 @@ public class JsonBuilder {
     	PrintWriter pw = new PrintWriter(jsonPath);
     	pw.print("{}");
     	pw.close();
-    	getJSON();
+    	getJson();
     	File tempfile = new File(playerPath);
 		
-    	//Players added to JSON from players.txt
+    	//Players added to Json from players.txt
     	Scanner in = new Scanner(tempfile);
 		while (in.hasNextLine()) {
 			String[] aliases = {};
@@ -452,11 +454,12 @@ public class JsonBuilder {
     	for (int i = 0; i < 20; ++i) {
     		//System.out.printf("%d\n", accuracy3[i]);
     	}
+		System.out.println("\nRemake finished");
     }
     
     public static String getAliases(String name) throws Exception {
-    	if (obj == null) getJSON();
-		if (jsonTree.get(name) instanceof String) name = (String)jsonTree.get(name);
+    	if (obj == null) getJson();
+		if (jsonTree.get(name).isJsonPrimitive()) name = jsonTree.get(name).getAsString();
     	File tempfile = new File(playerPath);
     	Scanner in = new Scanner(tempfile);
     	while (in.hasNextLine()) {
@@ -475,12 +478,12 @@ public class JsonBuilder {
     	throw new Exception("none");
     }
     
-    private static void getJSON() {
+    private static void getJson() {
     	try {
     		obj = jsonParser.parse(new FileReader(jsonPath));
-    		jsonTree = (JSONObject)obj;
+    		jsonTree = (JsonObject)obj;
     	}
-    	catch(IOException | ParseException e) {
+    	catch(JsonIOException | JsonSyntaxException | FileNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -495,7 +498,7 @@ public class JsonBuilder {
 
     private static void closeFW() {
     	try {
-    		file.write(jsonTree.toJSONString());
+    		file.write(jsonTree.toString());
 			file.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -503,51 +506,51 @@ public class JsonBuilder {
     }
 
 	private static void simulateGame(String name1, String name2, boolean online) {
-		JSONObject winner = (JSONObject) jsonTree.get(name1);
-		JSONObject loser = (JSONObject) jsonTree.get(name2);
+		JsonObject winner = (JsonObject) jsonTree.get(name1);
+		JsonObject loser = (JsonObject) jsonTree.get(name2);
 		
-		int winnerCurr = ((Number) winner.get("currTourney")).intValue();
-		int winnerLast = ((Number) winner.get("currTourney")).intValue();
+		int winnerCurr = winner.get("currTourney").getAsInt();
+		int winnerLast = winner.get("currTourney").getAsInt();
 		int winnerTime;
 		if (tourneyCounts[currSeason] != winnerCurr) {
 			winnerTime = tourneyCounts[currSeason] - winnerCurr;
-			winner.put("currTourney", tourneyCounts[currSeason]);
-			winner.put("lastTourney", winnerCurr);
+			winner.addProperty("currTourney", tourneyCounts[currSeason]);
+			winner.addProperty("lastTourney", winnerCurr);
 		} else {
 			winnerTime = tourneyCounts[currSeason] - winnerLast;
 		}
-		int loserCurr = ((Number) loser.get("currTourney")).intValue();
-		int loserLast = ((Number) loser.get("currTourney")).intValue();
+		int loserCurr = loser.get("currTourney").getAsInt();
+		int loserLast = loser.get("currTourney").getAsInt();
 		int loserTime;
 		if (tourneyCounts[currSeason] != loserCurr) {
 			loserTime = tourneyCounts[currSeason] - loserCurr;
-			loser.put("currTourney", tourneyCounts[currSeason]);
-			loser.put("lastTourney", loserCurr);
+			loser.addProperty("currTourney", tourneyCounts[currSeason]);
+			loser.addProperty("lastTourney", loserCurr);
 		} else {
 			loserTime = tourneyCounts[currSeason] - loserLast;
 		}
-		double winnerELO = ((Number) winner.get("ELO")).doubleValue();
-		double loserELO = ((Number) loser.get("ELO")).doubleValue();
-		int winnerGames = ((Number) winner.get("games")).intValue();
-		int loserGames = ((Number) loser.get("games")).intValue();
-		double winnerRD = ((Number) winner.get("ELORD")).doubleValue();
-		double winnerVol = ((Number) winner.get("ELOVol")).doubleValue();
-		double loserRD = ((Number) loser.get("ELORD")).doubleValue();
-		double loserVol = ((Number) loser.get("ELOVol")).doubleValue();
+		double winnerELO = winner.get("ELO").getAsDouble();
+		double loserELO =  loser.get("ELO").getAsDouble();
+		int winnerGames =  winner.get("games").getAsInt();
+		int loserGames = loser.get("games").getAsInt();
+		double winnerRD =  winner.get("ELORD").getAsDouble();
+		double winnerVol = winner.get("ELOVol").getAsDouble();
+		double loserRD = loser.get("ELORD").getAsDouble();
+		double loserVol =  loser.get("ELOVol").getAsDouble();
 		//double[] newELOs = calcELO(winnerELO, loserELO, winnerRD, loserRD, winnerVol, loserVol, winnerTime, loserTime);
 		double[] newELOs = calcELO(winnerELO, loserELO, winnerGames, loserGames, online);
-		boolean winnerLocal = (boolean)winner.get("local");
-		boolean loserLocal = (boolean)loser.get("local");
+		boolean winnerLocal = winner.get("local").getAsBoolean();
+		boolean loserLocal = loser.get("local").getAsBoolean();
 
 		if((!winnerLocal || loserLocal) && (loserGames > 3 || winnerGames <= 3)) {
-			winner.put("ELO", newELOs[0]);
-			winner.put("games", winnerGames + 1);
-			jsonTree.put(name1, winner);
+			winner.addProperty("ELO", newELOs[0]);
+			winner.addProperty("games", winnerGames + 1);
+			jsonTree.add(name1, winner);
 		}
 		if((!loserLocal || winnerLocal) && (winnerGames > 3 || loserGames <= 3)) {
-			loser.put("ELO", newELOs[1]);
-			loser.put("games", loserGames + 1);
-			jsonTree.put(name2, loser);
+			loser.addProperty("ELO", newELOs[1]);
+			loser.addProperty("games", loserGames + 1);
+			jsonTree.add(name2, loser);
 		}
 	}
 	
@@ -641,17 +644,17 @@ public class JsonBuilder {
     	    
     	    scanner.close();
 
-    	    JSONArray matches = (JSONArray) jsonParser.parse(inline);
+    	    JsonArray matches = (JsonArray) jsonParser.parse(inline);
     	    ArrayList<String[]> names = new ArrayList<String[]>();
     	    ArrayList<Integer[]> scores = new ArrayList<Integer[]>();
     	    //System.out.println(Arrays.toString(matches.toArray()));
     	    //System.out.println(matches.size());
     	    for(int i = 0; i < matches.size(); ++i) {
-    	    	JSONObject o = (JSONObject) ((JSONObject) matches.get(i)).get("match");
-    	    	//System.out.println(((JSONObject) ((JSONObject) matches.get(i)).get("match")).keySet().toString());
-    	    	String[] temp = {((Number)o.get("player1_id")).toString(), ((Number)o.get("player2_id")).toString()};
+    	    	JsonObject o = (JsonObject) ((JsonObject) matches.get(i)).get("match");
+    	    	//System.out.println(((JsonObject) ((JsonObject) matches.get(i)).get("match")).keySet().toString());
+    	    	String[] temp = {o.get("player1_id").getAsString(), o.get("player2_id").getAsString()};
     	    	//System.out.println(Arrays.toString(temp));
-    	    	String scoreTemp = (String) o.get("scores_csv");
+    	    	String scoreTemp = o.get("scores_csv").getAsString();
     	    	if (scoreTemp.length() == 3) {
     	    		Integer[] temp2 = {scoreTemp.charAt(0) - '0', scoreTemp.charAt(2) - '0'};
     	    		scores.add(temp2);
@@ -671,8 +674,8 @@ public class JsonBuilder {
     	    	conn.connect();
 
     	    	responsecode = conn.getResponseCode();
-    	    	JSONObject player1;
-    	    	JSONObject player2;
+    	    	JsonObject player1;
+    	    	JsonObject player2;
     	    	if (responsecode != 200) {
     	    		System.out.println(tournyPrefix + ID + "/participants/" + names.get(i)[0] + ".json?api_key=" + apiKey);
     	    	    throw new RuntimeException("HttpResponseCode: " + responsecode);
@@ -685,7 +688,7 @@ public class JsonBuilder {
     	    	    }
     	    	    scanner.close();
 
-    	    	    player1 = (JSONObject) ((JSONObject) jsonParser.parse(inline)).get("participant");
+    	    	    player1 = (JsonObject) ((JsonObject) jsonParser.parse(inline)).get("participant");
     	    	}
     	    	
     	    	url = new URL(tournyPrefix + ID + "/participants/" + names.get(i)[1] + ".json?api_key=" + apiKey);
@@ -704,9 +707,9 @@ public class JsonBuilder {
     	    	       inline += scanner.nextLine();
     	    	    }
     	    	    scanner.close();
-    	    	    player2 = (JSONObject) ((JSONObject) jsonParser.parse(inline)).get("participant");
+    	    	    player2 = (JsonObject) ((JsonObject) jsonParser.parse(inline)).get("participant");
     	    	}
-    	    	String[] temp = {((String)player1.get("name")).toLowerCase(), ((String)player2.get("name")).toLowerCase()};
+    	    	String[] temp = {player1.get("name").getAsString().toLowerCase(), player2.get("name").getAsString().toLowerCase()};
     	    	names.set(i, temp);
     	    }
     	    String msg = null;
@@ -718,8 +721,8 @@ public class JsonBuilder {
     	    		StringBuilder newname1 = new StringBuilder(name1);
     	    		StringBuilder newname2 = new StringBuilder(name2);
     	    		
-    	    		JSONObject obj1 = getPlayer(newname1);
-    	    		JSONObject obj2 = getPlayer(newname2);
+    	    		JsonObject obj1 = getPlayer(newname1);
+    	    		JsonObject obj2 = getPlayer(newname2);
     	    		if (obj1 == null) throw new Exception(name1);
     	    		if (obj2 == null) throw new Exception(name2);
     	    		name1 = newname1.toString();
@@ -765,17 +768,17 @@ public class JsonBuilder {
     	    
     	    scanner.close();
 
-    	    JSONArray matches = (JSONArray) jsonParser.parse(inline);
+    	    JsonArray matches = (JsonArray) jsonParser.parse(inline);
     	    ArrayList<String[]> names = new ArrayList<String[]>();
     	    ArrayList<Integer[]> scores = new ArrayList<Integer[]>();
     	    //System.out.println(Arrays.toString(matches.toArray()));
     	    //System.out.println(matches.size());
     	    for(int i = 0; i < matches.size(); ++i) {
-    	    	JSONObject o = (JSONObject) ((JSONObject) matches.get(i)).get("match");
-    	    	//System.out.println(((JSONObject) ((JSONObject) matches.get(i)).get("match")).keySet().toString());
-    	    	String[] temp = {((Number)o.get("player1_id")).toString(), ((Number)o.get("player2_id")).toString()};
+    	    	JsonObject o = (JsonObject) ((JsonObject) matches.get(i)).get("match");
+    	    	//System.out.println(((JsonObject) ((JsonObject) matches.get(i)).get("match")).keySet().toString());
+    	    	String[] temp = {o.get("player1_id").getAsString(), o.get("player2_id").getAsString()};
     	    	//System.out.println(Arrays.toString(temp));
-    	    	String scoreTemp = (String) o.get("scores_csv");
+    	    	String scoreTemp = o.get("scores_csv").getAsString();
     	    	if (scoreTemp.length() == 3) {
     	    		Integer[] temp2 = {scoreTemp.charAt(0) - '0', scoreTemp.charAt(2) - '0'};
     	    		scores.add(temp2);
@@ -795,8 +798,8 @@ public class JsonBuilder {
     	    	conn.connect();
 
     	    	responsecode = conn.getResponseCode();
-    	    	JSONObject player1;
-    	    	JSONObject player2;
+    	    	JsonObject player1;
+    	    	JsonObject player2;
     	    	if (responsecode != 200) {
     	    		System.out.println(tournyPrefix + ID + "/participants/" + names.get(i)[0] + ".json?api_key=" + apiKey);
     	    	    throw new RuntimeException("HttpResponseCode: " + responsecode);
@@ -809,7 +812,7 @@ public class JsonBuilder {
     	    	    }
     	    	    scanner.close();
 
-    	    	    player1 = (JSONObject) ((JSONObject) jsonParser.parse(inline)).get("participant");
+    	    	    player1 = (JsonObject) ((JsonObject) jsonParser.parse(inline)).get("participant");
     	    	}
     	    	
     	    	url = new URL(tournyPrefix + ID + "/participants/" + names.get(i)[1] + ".json?api_key=" + apiKey);
@@ -828,9 +831,9 @@ public class JsonBuilder {
     	    	       inline += scanner.nextLine();
     	    	    }
     	    	    scanner.close();
-    	    	    player2 = (JSONObject) ((JSONObject) jsonParser.parse(inline)).get("participant");
+    	    	    player2 = (JsonObject) ((JsonObject) jsonParser.parse(inline)).get("participant");
     	    	}
-    	    	String[] temp = {((String)player1.get("name")).toLowerCase(), ((String)player2.get("name")).toLowerCase()};
+    	    	String[] temp = {player1.get("name").getAsString().toLowerCase(), (String)player2.get("name").getAsString().toLowerCase()};
     	    	names.set(i, temp);
     	    }
     	    
