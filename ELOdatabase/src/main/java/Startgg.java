@@ -58,8 +58,31 @@ public class Startgg {
         String name2 = entrant2.get("name").getAsString();
         JsonBuilder.simulateSet(name1, name2, games - score, score, false, online);
       }
-      ArrayList<String[]> names = new ArrayList<String[]>();
+      ArrayList<String[]> sets = new ArrayList<String[]>();
     	    ArrayList<Integer[]> scores = new ArrayList<Integer[]>();
       System.out.println(jsonResponse);
     }
+    public String convertToCSV(String[] data) {
+    	return Stream.of(data)
+      		.map(this::escapeSpecialCharacters)
+      		.collect(Collectors.joining(","));
+    }
+	public void givenDataArray_whenConvertToCSV_thenOutputCreated(String tourneyName) throws IOException {
+    		File csvOutputFile = new File(tourneyName);
+    		try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+        		dataLines.stream()
+          		.map(this::convertToCSV)
+          		.forEach(pw::println);
+    		}
+    		assertTrue(csvOutputFile.exists());
+	}
+	public String escapeSpecialCharacters(String data) {
+    		String escapedData = data.replaceAll("\\R", " ");
+    		if (data.contains(",") || data.contains("\"") || data.contains("'")) {
+    		    data = data.replace("\"", "\"\"");
+    		    escapedData = "\"" + data + "\"";
+    		}
+    		return escapedData;
+	}
+	
 }
