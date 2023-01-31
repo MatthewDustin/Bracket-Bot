@@ -1,91 +1,65 @@
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import javax.net.ssl.HttpsURLConnection;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-
-
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
-
+import java.util.Iterator;
 
 import com.google.gson.JsonObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-
-import org.bson.Document;
-
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import org.bson.types.ObjectId;
-
 public class Startgg {
     public static void main(String[] args) {
         try {
-            getStartgg();
-        } catch (IOException e) {
+            getStartgg("tournament/melee-mondays-weekly-1-picantetcg/event/melee-singles", false);
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
-    public static void getStartgg() throws IOException {
+    public static void getStartgg(String slug, boolean online) throws Exception {
+      JsonParser jsonParser = new JsonParser();
 		  OkHttpClient client = new OkHttpClient().newBuilder()
         .build();
+      String pages = "1";
+      String perPage = "100";
       MediaType mediaType = MediaType.parse("application/json");
-      RequestBody body = RequestBody.create(mediaType, "{\"query\":\"query EventSets($eventSlug: String!, $page: Int!, $perPage: Int!) {\\r\\n  event(slug: $eventSlug) {\\r\\n    id\\r\\n    name\\r\\n    sets(\\r\\n      page: $page\\r\\n      perPage: $perPage\\r\\n      sortType: STANDARD\\r\\n    ) {\\r\\n      pageInfo {\\r\\n        total\\r\\n      }\\r\\n      nodes {\\r\\n        id\\r\\n        slots {\\r\\n          id\\r\\n          entrant {\\r\\n            id\\r\\n            name\\r\\n          }\\r\\n        }\\r\\n      }\\r\\n    }\\r\\n  }\\r\\n},\",\"variables\":{\"eventSlug\":\"tournament/melee-mondays-weekly-1-picantetcg/event/melee-singles\",\"page\":1,\"perPage\":100}}");
+      String json = "{\"query\":\"query EventSets($eventSlug: String!, $page: Int!, $perPage: Int!) {\\r\\n  event(slug: $eventSlug) {\\r\\n    id\\r\\n    name\\r\\n    sets(\\r\\n      page: $page\\r\\n      perPage: $perPage\\r\\n      sortType: STANDARD\\r\\n    ) {\\r\\n      pageInfo {\\r\\n        total\\r\\n      }\\r\\n      nodes {\\r\\n        id\\r\\n        winnerId\\r\\n        displayScore\\r\\n        totalGames\\r\\n        slots {\\r\\n          id\\r\\n          entrant {\\r\\n            id\\r\\n            name\\r\\n          }\\r\\n        }\\r\\n      }\\r\\n    }\\r\\n  }\\r\\n},\",\"variables\":{\"eventSlug\":\""+ slug + "\",\"page\":" + pages + ",\"perPage\":"+ perPage +"}}";
+      RequestBody body = RequestBody.create(mediaType, json);
       Request request = new Request.Builder()
         .url("https://api.smash.gg/gql/alpha")
         .method("POST", body)
-        .addHeader("Authorization", "Bearer 220406d16d278620593e1af51a6201bb")
+        .addHeader("Authorization", "Bearer " + JsonBuilder.apiKeyStart)
         .addHeader("Content-Type", "application/json")
         .build();
       Response response = client.newCall(request).execute();
       String jsonResponse = response.body().string();
 
+      JsonObject event = jsonParser.parse(jsonResponse).getAsJsonObject().get("data").getAsJsonObject().get("event").getAsJsonObject();
+    	int id = event.get("id").getAsInt();
+      JsonArray sets = event.get("sets").getAsJsonObject().get("Nodes").getAsJsonArray();
+
+      for(JsonElement set : sets) {
+        JsonObject setO = set.getAsJsonObject();
+        String winnerID = setO.get("winnerId").getAsString();
+        int games = setO.get("totalGames").getAsInt();
+        String scoreLine = setO.get("displayScore").getAsString();
+        int score = Character.getNumericValue(scoreLine.charAt(scoreLine.length()-1));
+        JsonObject entrant1 = setO.get("slots").getAsJsonArray().get(0).getAsJsonObject().get("Entrant").getAsJsonObject();
+        JsonObject entrant2 = setO.get("slots").getAsJsonArray().get(1).getAsJsonObject().get("Entrant").getAsJsonObject();
+        int id1 = entrant1.get("id").getAsInt();
+        int id2 = entrant2.get("id").getAsInt();
+        String name1 = entrant1.get("name").getAsString();
+        String name2 = entrant2.get("name").getAsString();
+        JsonBuilder.simulateSet(name1, name2, games - score, score, false, online);
+      }
+      ArrayList<String[]> names = new ArrayList<String[]>();
+    	    ArrayList<Integer[]> scores = new ArrayList<Integer[]>();
       System.out.println(jsonResponse);
     }
 }
