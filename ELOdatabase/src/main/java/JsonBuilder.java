@@ -290,14 +290,35 @@ public class JsonBuilder {
 
     public static JsonObject getPlayer(StringBuilder sb) {
 		if (obj == null) getJson();
+		
     	String name = sb.toString().toLowerCase();
+		int team = name.indexOf(" | ") + 3;
+		if (team > 3) {
+			name = name.substring(team);
+		}
+		List<String> lname = Arrays.asList(name.split(" "));
+		Collections.reverse(lname);
+		for(String s : lname) {
+			if (jsonTree.has(s)) {
+				name = s;
+			}
+		}
     	if (!jsonTree.has(name)) {
     		String xname = name.replaceAll("\\p{Punct}", "");
     		if (jsonTree.has(xname)) {
     			name = xname;
     		} else {
+				lname = Arrays.asList(xname.split(" "));
+				Collections.reverse(lname);
+				for(String s : lname) {
+					if (jsonTree.has(s)) {
+						name = s;
+					}
+				}
 				String sname = name.replaceAll("\\p{Punct}", " ");
-				for(String s : sname.split(" ")) {
+				lname = Arrays.asList(sname.split(" "));
+				Collections.reverse(lname);
+				for(String s : lname) {
 					if (jsonTree.has(s)) {
 						name = s;
 					}

@@ -57,7 +57,9 @@ public class Startgg {
         String winnerID = setO.get("winnerId").getAsString();
         int games = setO.get("totalGames").getAsInt();
         String scoreLine = setO.get("displayScore").getAsString();
-        int score = Character.getNumericValue(scoreLine.charAt(scoreLine.length()-1));
+        int Lscore = Character.getNumericValue(scoreLine.charAt(scoreLine.length()-1));
+        int Wscore = Character.getNumericValue(scoreLine.charAt(scoreLine.indexOf(" - ") - 1));
+        
         JsonObject entrant1 = setO.get("slots").getAsJsonArray().get(0).getAsJsonObject().get("entrant").getAsJsonObject();
         JsonObject entrant2 = setO.get("slots").getAsJsonArray().get(1).getAsJsonObject().get("entrant").getAsJsonObject();
         int id1 = entrant1.get("id").getAsInt();
@@ -66,9 +68,17 @@ public class Startgg {
         StringBuilder sbname2 = new StringBuilder(entrant2.get("name").getAsString());
         JsonBuilder.getPlayer(sbname1);
         JsonBuilder.getPlayer(sbname2);
+        if (Lscore > Wscore) {
+          int t = Lscore;
+          Lscore = Wscore;
+          Wscore = t;
+          StringBuilder tempsb = sbname1;
+          sbname1 = sbname2;
+          sbname2 = tempsb;
+        }
         //JsonBuilder.simulateSet(sbname1, sbname2, games - score, score, false, online);
         
-        setsCSV.add(new String[] {sbname1.toString(), sbname2.toString(), Integer.toString(games - score), Integer.toString(score)});
+        setsCSV.add(new String[] {sbname1.toString(), sbname2.toString(), Integer.toString(Wscore), Integer.toString(Lscore)});
       }
       CSVWriter csvWriter = new CSVWriter(new FileWriter(title + ".csv"));
       csvWriter.writeAll(setsCSV);
