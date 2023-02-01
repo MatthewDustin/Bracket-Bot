@@ -79,18 +79,17 @@ public class JsonBuilder {
      *
      * returns false for wrong names or scores.
      */
-    public static void simulateSet(String name1, String name2, int score1, int score2, boolean remake, boolean online) throws Exception {
+    public static void simulateSet(StringBuilder sbName1, StringBuilder sbName2, int score1, int score2, boolean remake, boolean online) throws Exception {
 		getJson();
+		String name1 = sbName1.toString();
+		String name2 = sbName2.toString();
 		
-		StringBuilder newname1 = new StringBuilder(name1);
-		StringBuilder newname2 = new StringBuilder(name2);
-		
-		JsonObject obj1 = getPlayer(newname1);
-		JsonObject obj2 = getPlayer(newname2);
+		JsonObject obj1 = getPlayer(sbName1);
+		JsonObject obj2 = getPlayer(sbName2);
 		if (obj1 == null) throw new Exception(name1);
 		if (obj2 == null) throw new Exception(name2);
-		name1 = newname1.toString();
-		name2 = newname2.toString();
+		name1 = sbName1.toString();
+		name2 = sbName1.toString();
 		
 		if (score1 < 0 || score2 < 0 || (score1 == 0 && score2 == 0) || (score1 + score2 > 5)) throw new Exception("Scores");
 		if (name1.equals(name2)) throw new Exception("duplicate");
@@ -290,6 +289,7 @@ public class JsonBuilder {
     }
 
     public static JsonObject getPlayer(StringBuilder sb) {
+		if (obj == null) getJson();
     	String name = sb.toString().toLowerCase();
     	if (!jsonTree.has(name)) {
     		String xname = name.replaceAll("\\p{Punct}", "");
@@ -305,6 +305,9 @@ public class JsonBuilder {
     		}
 		}
     	JsonElement player = jsonTree.get(name);
+
+		if (player == null) return null;
+
     	if (player.isJsonPrimitive()) {
     		sb.replace(0, sb.length(), player.getAsString());
     		player = jsonTree.get( player.getAsString());
@@ -442,7 +445,7 @@ public class JsonBuilder {
     		
     		String name1 = line[0];
     		String name2 = line[1]; 
-    		simulateSet(name1, name2, Integer.parseInt(line[2]), Integer.parseInt(line[3]), true, online);    		
+    		simulateSet(new StringBuilder(name1), new StringBuilder(name2), Integer.parseInt(line[2]), Integer.parseInt(line[3]), true, online);    		
     	}
     	in.close();
     	
@@ -720,14 +723,10 @@ public class JsonBuilder {
     	    		String name2 = names.get(i)[1];
     	    		StringBuilder newname1 = new StringBuilder(name1);
     	    		StringBuilder newname2 = new StringBuilder(name2);
-    	    		
-    	    		JsonObject obj1 = getPlayer(newname1);
-    	    		JsonObject obj2 = getPlayer(newname2);
-    	    		if (obj1 == null) throw new Exception(name1);
-    	    		if (obj2 == null) throw new Exception(name2);
-    	    		name1 = newname1.toString();
+
+    	    		simulateSet(newname1, newname2, scores.get(i)[0], scores.get(i)[1], false, online);
+					name1 = newname1.toString();
     	    		name2 = newname2.toString();
-    	    		simulateSet(name1, name2, scores.get(i)[0], scores.get(i)[1], false, online);
     	    		returnMsg += name1 + "\t" + name2 + "\t" + scores.get(i)[0] + " " + scores.get(i)[1] + "\n";
     	    	}
     	    	catch (Exception e) {
@@ -842,7 +841,7 @@ public class JsonBuilder {
     	    	try {
     	    		String name1 = names.get(i)[0];
     	    		String name2 = names.get(i)[1];
-    	    		simulateSet(name1, name2, scores.get(i)[0], scores.get(i)[1], false, online);
+    	    		simulateSet(new StringBuilder(name1), new StringBuilder(name2), scores.get(i)[0], scores.get(i)[1], false, online);
     	    	}
     	    	catch (Exception e) {
     	    		msg = e.getMessage();
