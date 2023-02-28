@@ -30,11 +30,8 @@ public class Commands extends ListenerAdapter {
 	private Timer timer;
 	
 	
-	@Override
-	public void onSlash(@NotNull SlashCommandInteractionEvent event) {
-		
-	}
 	
+
 	public void onMessageReceived(MessageReceivedEvent event) {
 		if (event.getAuthor().isBot() || event.getChannelType().isGuild()) return;
 		String[] args = event.getMessage().getContentRaw().toLowerCase().split(" ");
@@ -83,7 +80,7 @@ public class Commands extends ListenerAdapter {
 					eb.addField(args[1] + " dubs", String.valueOf(record[1]), true);
 					eb.addField(args[2] + " dubs", String.valueOf(record[2]), true);
 					
-					event.getAuthor().openPrivateChannel().flatMap(channel -> channel.sendMessage(eb.build())).queue(); 
+					event.getAuthor().openPrivateChannel().flatMap(channel -> channel.sendMessage((CharSequence) eb.build())).queue(); 
 				} else {
 					throw new Exception("args");
 				}
@@ -202,7 +199,7 @@ public class Commands extends ListenerAdapter {
 		if (args[0].equals(prefix + "game") || args[0].equals("game") || args[0].equals("g") || args[0].equals(prefix + "g")) {
 			try {
 				if(args.length == 6 && (args[5].equals("true") || args[5].equals("false"))) {
-					JsonBuilder.simulateSet(args[1], args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]), false, Boolean.valueOf(args[5]));
+					JsonBuilder.simulateSet(new StringBuilder(args[1]), new StringBuilder(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), false, Boolean.valueOf(args[5]));
 					event.getAuthor().openPrivateChannel().flatMap(channel -> channel.sendMessage("Game recorded!")).queue();
 				}
 				else {
@@ -294,7 +291,7 @@ public class Commands extends ListenerAdapter {
 		}
 	}
 
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+	/* public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		//if (event.getAuthor().getIdLong() != magID) return;
 		
 		String[] args = event.getMessage().getContentRaw().toLowerCase().split(" ");
@@ -341,7 +338,7 @@ public class Commands extends ListenerAdapter {
 		if (args[0].equals(prefix + "game") || args[0].equals(prefix + "g")) {
 			try {
 				if(args.length == 6 && (args[5].equals("true") || args[5].equals("false"))) {
-					JsonBuilder.simulateSet(args[1], args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]), false, Boolean.valueOf(args[5]));
+					JsonBuilder.simulateSet(new StringBuilder(args[1]), new StringBuilder(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), false, Boolean.valueOf(args[5]));
 					event.getMessage().reply("Game recorded!").queue();
 				}
 				else {
@@ -544,5 +541,5 @@ public class Commands extends ListenerAdapter {
 				e.printStackTrace();
 			}
 		}
-	}
+	} */
 }

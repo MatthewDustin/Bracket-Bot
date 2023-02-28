@@ -19,7 +19,7 @@ public class Startgg {
     public static void main(String[] args) {
         try {
             
-            getStartgg("tournament/melee-mondays-weekly-1-picantetcg/event/melee-singles", false);
+            getStartgg("https://www.start.gg/tournament/melee-mondays-weekly-1-picantetcg/events/melee-singles/", false);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -54,9 +54,12 @@ public class Startgg {
       setsCSV.add(new String[]{title});
       for(JsonElement set : sets) {
         JsonObject setO = set.getAsJsonObject();
+        String scoreLine = setO.get("displayScore").getAsString();
+        if (scoreLine.equals("DQ")) {
+          continue;
+        }
         String winnerID = setO.get("winnerId").getAsString();
         int games = setO.get("totalGames").getAsInt();
-        String scoreLine = setO.get("displayScore").getAsString();
         int Lscore = Character.getNumericValue(scoreLine.charAt(scoreLine.length()-1));
         int Wscore = Character.getNumericValue(scoreLine.charAt(scoreLine.indexOf(" - ") - 1));
         

@@ -17,7 +17,7 @@ devMan true dev-devmanwalking-tristan
 Polecat false
 SMM true daybreeze-setch22
 Spizzo true cirinio-speezus-speezo
-Bricc true 
+Bricc true
 Exposed false exposednips-stb/shedgamingexposed-stbexposed-stinky-stb
 Pineapple true pineapplenc
 ImDolfin false
@@ -138,7 +138,7 @@ crane false
 RubbahBand false
 roma64 false
 saef false saefssbm-agent
-amp false 
+amp false
 ordotorp false ordo-torp
 gritty false grittyyyy
 osmics false

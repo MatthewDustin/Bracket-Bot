@@ -37,8 +37,11 @@ import org.bson.types.ObjectId;
 public class JsonBuilder {
 	static JsonParser jsonParser = new JsonParser();
 	static Object obj;
+	static Object playerObj;
     static JsonObject jsonTree;
+	static JsonObject playerTree;
     static FileWriter file;
+	static FileWriter playerFile;
     public static int[] tourneyCounts = new int[100];
     public static int currSeason = 2;
     public static final String[] jsonPaths = {"./Database/spring2022DB.json", "./Database/fall2021DB.json", "./Database/allDB.json"};
@@ -86,13 +89,19 @@ public class JsonBuilder {
 		
 		JsonObject obj1 = getPlayer(sbName1);
 		JsonObject obj2 = getPlayer(sbName2);
-		if (obj1 == null) throw new Exception(name1);
-		if (obj2 == null) throw new Exception(name2);
+		if (obj1 == null)
+		{
+			 throw new Exception(name1);
+		}
+		if (obj2 == null){
+			 throw new Exception(name2);
+		}
 		name1 = sbName1.toString();
-		name2 = sbName1.toString();
+		name2 = sbName2.toString();
 		
 		if (score1 < 0 || score2 < 0 || (score1 == 0 && score2 == 0) || (score1 + score2 > 5)) throw new Exception("Scores");
-		if (name1.equals(name2)) throw new Exception("duplicate");
+		if (name1.equals(name2))
+		 throw new Exception("duplicate");
 		for(int i = 0; i < score1; ++i) {
 			simulateGame(name1, name2, online);
 		}
@@ -353,11 +362,14 @@ public class JsonBuilder {
      * 
      */
 	public static void addPlayer(String name, boolean local, String[] aliases, boolean remake) throws Exception {
-		if (obj == null) getJson();
+		if (obj == null | playerObj == null) getJson();
 		if (jsonTree.has(name)) throw new Exception(name);
 		
 		for(String s : aliases) {
 			if (jsonTree.has(s)) throw new Exception(s);
+			if (s.equals("") || s.equals(" ")){
+				System.out.println();
+			}
 			jsonTree.addProperty(s.toLowerCase(), name);
 		}
 		
@@ -433,7 +445,7 @@ public class JsonBuilder {
     	Scanner in = new Scanner(tempfile);
 		while (in.hasNextLine()) {
 			String[] aliases = {};
-			String[] line = in.nextLine().split(" ");
+			String[] line = in.nextLine().split(" ", 3);
 			if(line.length > 2) aliases = line[2].split("-");
 			addPlayer(line[0].toLowerCase(), Boolean.valueOf(line[1]), aliases, true);
 		}
@@ -466,6 +478,9 @@ public class JsonBuilder {
     		
     		String name1 = line[0];
     		String name2 = line[1]; 
+			if (name2.equals("johnny")) {
+				System.out.println();
+			}
     		simulateSet(new StringBuilder(name1), new StringBuilder(name2), Integer.parseInt(line[2]), Integer.parseInt(line[3]), true, online);    		
     	}
     	in.close();
@@ -502,10 +517,13 @@ public class JsonBuilder {
     	throw new Exception("none");
     }
     
-    private static void getJson() {
+    public static void getJson() {
     	try {
     		obj = jsonParser.parse(new FileReader(jsonPath));
-    		jsonTree = (JsonObject)obj;
+			//playerObj = jsonParser.parse(new FileReader(playerPath));
+    		jsonTree = ((JsonElement) obj).getAsJsonObject();
+			//System.out.println("json tree: " + jsonTree.getAsString());
+			//playerTree = (JsonObject)playerObj;
     	}
     	catch(JsonIOException | JsonSyntaxException | FileNotFoundException e) {
             e.printStackTrace();
@@ -515,6 +533,7 @@ public class JsonBuilder {
     private static void getFW() {
     	try {
     		file = new FileWriter(jsonPath);
+			//playerFile = new FileWriter(playerPath);
     	} catch (IOException e) {
     		e.printStackTrace();
     	}
@@ -523,6 +542,8 @@ public class JsonBuilder {
     private static void closeFW() {
     	try {
     		file.write(jsonTree.toString());
+			//playerFile.write(playerTree.toString());
+			//playerFile.close();
 			file.close();
 		} catch (IOException e) {
 			e.printStackTrace();

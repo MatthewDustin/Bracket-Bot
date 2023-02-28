@@ -44,13 +44,13 @@ devman savestate 3 0 false
 
 //fellafridays12-may292020
 prometheus white 2 0 true
-saef johnny 2 0 true
+saef johnnyvfgc 2 0 true
 roma64 pat 2 0 true
 prometheus syched 2 0 true
 devman simmons 2 1 true
 roma64 badmouth 2 0 true
 saef roma64 1 2 true
-johnny duk 0 2 true
+johnnyvfgc duk 0 2 true
 simmons duk 2 1 true
 simmons syched 2 0 true
 devman siddward 2 0 true
@@ -61,7 +61,7 @@ roma64 devman 2 0 true
 prometheus saef 2 1 true
 roma64 prometheus 1 2 true
 prometheus white 2 0 true
-saef johnny 2 0 true
+saef johnnyvfgc 2 0 true
 duk sake05 0 2 true
 roma64 pat 2 0 true
 prometheus syched 2 0 true
@@ -69,7 +69,7 @@ devman simmons 2 1 true
 saef sake05 2 0 true
 roma64 badmouth 2 0 true
 saef roma64 1 2 true
-johnny duk 0 2 true
+johnnyvfgc duk 0 2 true
 simmons duk 2 1 true
 badmouth sake05 2 0 true
 simmons syched 2 0 true
@@ -274,7 +274,7 @@ regi isla 3 1 true
 siddward kriskros 2 0 true
 qwest viber 2 1 true
 pat mlmlop 2 1 true
-regi johnny 2 0 true
+regi johnnyvfgc 2 0 true
 bongobeat slawdawg 2 1 true
 devman jerm 2 0 true
 geoux shenal 2 0 true
@@ -286,7 +286,7 @@ siddward pat 2 1 true
 regi devman 0 2 true
 siddward devman 0 3 true
 kriskros viber 0 2 true
-johnny slawdawg 1 2 true
+johnnyvfgc slawdawg 1 2 true
 jerm shenal 1 2 true
 bongobeat mlmlop 2 0 true
 zane slawdawg 2 0 true
@@ -839,7 +839,7 @@ simmons devman 2 3 false
 devman simmons 2 3 false
 
 //pandemicPanic1
-mlmlop johnny 2 0 true
+mlmlop johnnyvfgc 2 0 true
 ogre kestoro 2 0 true
 kaywayz dairodactyl 2 0 true
 simmons mlmlop 2 0 true
@@ -849,7 +849,7 @@ blackchris walterjr 2 0 true
 simmons bups 2 0 true
 sake05 blackchris 0 2 true
 simmons blackchris 2 3 true
-walterjr johnny 2 0 true
+walterjr johnnyvfgc 2 0 true
 kaywayz kestoro 2 0 true
 ogre dairodactyl 2 0 true
 walterjr kaywayz 2 0 true
@@ -897,15 +897,15 @@ pelipper bups 3 0 true
 roastfellow utensil 2 1 true
 shenal belm0ney 2 0 true
 champloooooo kestoro 0 2 true
-dairodactyl johnny 0 2 true
+dairodactyl johnnyvfgc 0 2 true
 simmons roastfellow 2 0 true
 harrison shenal 2 0 true
 bups kestoro 2 0 true
-ogre johnny 2 0 true
+ogre johnnyvfgc 2 0 true
 simmons harrison 2 1 true
 bups ogre 2 0 true
 simmons bups 3 0 true
-johnny utensil 0 2 true
+johnnyvfgc utensil 0 2 true
 kestoro belm0ney 2 0 true
 shenal champloooooo 2 0 true
 roastfellow dairodactyl 2 1 true
@@ -1182,8 +1182,8 @@ nogh prometheus 2 3 true
 prometheus nogh 0 3 true
 
 //pandemicpanic6
-johnny foolishfo0l 2 0 true
-bups johnny 2 0 true
+johnnyvfgc foolishfo0l 2 0 true
+bups johnnyvfgc 2 0 true
 mlmlop slim 1 2 true
 ogre chastizer 2 0 true
 shenal walterjr 1 2 true
@@ -1192,7 +1192,7 @@ ogre walterjr 3 0 true
 slim ogre 3 0 true
 shenal foolishfo0l 2 0 true
 chastizer shenal 0 2 true
-mlmlop johnny 2 1 true
+mlmlop johnnyvfgc 2 1 true
 bups shenal 3 0 true
 walterjr mlmlop 3 0 true
 bups walterjr 3 0 true
@@ -1621,14 +1621,14 @@ peele pasta 3 0 false
 //motm66
 bups mag 2 0 true
 kshrubb speezo 2 1 true
-mlmlop johnny 1 2 true
+mlmlop johnnyvfgc 1 2 true
 viber kestoro 0 2 true
 zane jabrias 2 0 true
 jerm qwest 2 0 true
 blue53 jgold 2 0 true
 slawdawg peele 2 0 true
 bups kshrubb 2 0 true
-johnny kestoro 1 2 true
+johnnyvfgc kestoro 1 2 true
 zane jerm 2 0 true
 blue53 slawdawg 2 1 true
 bups kestoro 2 0 true
