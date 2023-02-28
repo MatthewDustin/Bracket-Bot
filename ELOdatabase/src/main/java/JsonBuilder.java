@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -897,5 +898,40 @@ public class JsonBuilder {
     	    }
     	    if (msg != null) throw new Exception(msg);
     	}
+	}
+
+    public static void addSeason(int name, int day, int month, int year, int dayEnd, int monthEnd,
+            int yearEnd) {
+		if (seasonObj == null) getJson();
+		
+		getFW();
+		JsonObject newSeason = new JsonObject();
+		newSeason.addProperty("name", name);
+		newSeason.addProperty("start day", day);
+		newSeason.addProperty("start month", month);
+		newSeason.addProperty("start year", year);
+		newSeason.addProperty("end day", dayEnd);
+		newSeason.addProperty("end month", monthEnd);
+		newSeason.addProperty("end year", yearEnd);
+		seasonTree.add(name, newSeason);
+		closeFW();
+    }
+
+	public static Set<String> getSeasons() {
+		if (seasonObj == null) getJson();
+		return seasonTree.keySet();
+	}
+
+	public static int[] getSeason(String name) {
+		if (seasonObj == null) getJson();
+		JsonObject season = seasonTree.get(name);
+		int[] ans = new int[6];
+		ans[0] = season.get("start day").getAsInt();
+		ans[1] = season.get("start month").getAsInt();
+		ans[2] = season.get("start year").getAsInt();
+		ans[3] = season.get("end day").getAsInt();
+		ans[4] = season.get("end month").getAsInt();
+		ans[5] = season.get("end year").getAsInt();
+		return ans;
 	}
 }
