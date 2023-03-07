@@ -55,7 +55,16 @@ public class SeasonBuilder {
 		closeFW();
     }
 
-	
+	/*
+     * returns false if changes failed
+     */
+    public static boolean deleteSeason(String name) {
+    	if (seasonObj == null) getJson();
+    	if (!seasonTree.has(name)) return false;
+    	seasonTree.remove(name);
+    	closeFW();
+    	return true;
+    }
 
     public static Set<String> getSeasons() {
 		if (seasonObj == null) getJson();
