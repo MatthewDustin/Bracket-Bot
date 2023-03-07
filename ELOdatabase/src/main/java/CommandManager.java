@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -154,9 +155,8 @@ public class CommandManager extends ListenerAdapter{
 			BotStartup.shutdown();
 		}
 
-		if(command.equalsIgnoreCase("addSeason")) {
-			event.reply("Season added!").queue();
-			int name = event.getOption("name").getAsInt();
+		if(command.equalsIgnoreCase("addseason")) {
+			String name = event.getOption("name").getAsString();
 			int day = event.getOption("day").getAsInt();
 			int month = event.getOption("month").getAsInt();
 			int year = event.getOption("year").getAsInt();
@@ -164,9 +164,10 @@ public class CommandManager extends ListenerAdapter{
 			int monthEnd = event.getOption("month2").getAsInt();
 			int yearEnd = event.getOption("year2").getAsInt();
 			JsonBuilder.addSeason(name, day, month, year, dayEnd, monthEnd, yearEnd);
+			event.reply("Season added!").queue();
 		}
 
-		if(command.equalsIgnoreCase("changeSeason")) {
+		if(command.equalsIgnoreCase("changeseason")) {
 			Set<String> seasons = JsonBuilder.getSeasons();
 			Builder select = StringSelectMenu.create("change season");
 			for(String name : seasons) {
@@ -186,6 +187,9 @@ public class CommandManager extends ListenerAdapter{
         if (event.getComponentId().equals("change season")) {
             String name = event.getValues().get(0);
 			int[] season = JsonBuilder.getSeason(name);
+			TextInput newName = TextInput.create("name", "New name", TextInputStyle.SHORT)
+                    .setPlaceholder(name)
+                    .build();
 			TextInput day = TextInput.create("day", "start day", TextInputStyle.SHORT)
                     .setPlaceholder(String.valueOf(season[0]))
                     .build();
@@ -204,10 +208,29 @@ public class CommandManager extends ListenerAdapter{
 			TextInput yearEnd = TextInput.create("yearEnd", "end year", TextInputStyle.SHORT)
                     .setPlaceholder(String.valueOf(season[5]))
                     .build();
-            Modal modal = Modal.create("changeSeason", "Update a Season")
-                    .addComponents(ActionRow.of(day), ActionRow.of(month))
+            Modal modal = Modal.create("changeSeason " + name, "Update a Season")
+                    .addActionRows(ActionRow.of(day), ActionRow.of(month), ActionRow.of(year), ActionRow.of(dayEnd), ActionRow.of(monthEnd), ActionRow.of(yearEnd), ActionRow.of(newName))
                     .build();
 			event.replyModal(modal);
+        }
+    }
+
+	@Override
+    public void onModalInteraction(@NotNull ModalInteractionEvent event) {
+		String[] modalArgs = event.getModalId().split(" ");
+        if (modalArgs[0].equals("changeSeason")) {
+            int day = Integer.parseInt(event.getValue("day").getAsString());
+			int month = Integer.parseInt(event.getValue("month").getAsString());
+			int year = Integer.parseInt(event.getValue("year").getAsString());
+			int dayEnd = Integer.parseInt(event.getValue("dayEnd").getAsString());
+			int monthEnd = Integer.parseInt(event.getValue("monthEnd").getAsString());
+			int yearEnd = Integer.parseInt(event.getValue("yearEnd").getAsString());
+			String newName = event.getValue("name").getAsString();
+			String name = modalArgs[1];
+
+
+			JsonBuilder.changeSeason(name, newName, day, month, year, dayEnd, monthEnd, yearEnd);
+            event.reply("Thanks for your request!").setEphemeral(true).queue();
         }
     }
 
@@ -227,7 +250,8 @@ public class CommandManager extends ListenerAdapter{
         OptionData player = new OptionData(OptionType.STRING, "player", "Player Name", true);
         OptionData slugLink = new OptionData(OptionType.STRING, "link", "https://www.start.gg/tournament/melee-mondays-weekly-1-picantetcg/event/melee-singles/", true);
         OptionData online = new OptionData(OptionType.BOOLEAN, "online", "Was the tournament Online?", true);
-        commandData.add(Commands.slash("addSeason", "Enter start and end date of a new season.").addOptions(name, day, month, year, day2, month2, year2));
+		commandData.add(Commands.slash("changeseason", "Change a season after selecting its name."));
+		commandData.add(Commands.slash("addseason", "Enter start and end date of a new season.").addOptions(name, day, month, year, day2, month2, year2));
 		commandData.add(Commands.slash("addtourney", "Get a CSV file of sets from a tourney.").addOptions(slugLink, online));
         commandData.add(Commands.slash("record", "Get the head-to-head record of two players.").addOptions(player1, player2));
         commandData.add(Commands.slash("hotness", "How 'HOT' would this set be? Give me two players.").addOptions(player1, player2));

@@ -900,7 +900,7 @@ public class JsonBuilder {
     	}
 	}
 
-    public static void addSeason(int name, int day, int month, int year, int dayEnd, int monthEnd,
+    public static void addSeason(String name, int day, int month, int year, int dayEnd, int monthEnd,
             int yearEnd) {
 		if (seasonObj == null) getJson();
 		
@@ -914,6 +914,28 @@ public class JsonBuilder {
 		newSeason.addProperty("end month", monthEnd);
 		newSeason.addProperty("end year", yearEnd);
 		seasonTree.add(name, newSeason);
+		closeFW();
+    }
+
+	public static void changeSeason(String name, String newName, int day, int month, int year, int dayEnd, int monthEnd,
+            int yearEnd) {
+		if (seasonObj == null) getJson();
+		
+		getFW();
+		JsonObject newSeason = new JsonObject();
+		newSeason.addProperty("name", newName);
+		newSeason.addProperty("start day", day);
+		newSeason.addProperty("start month", month);
+		newSeason.addProperty("start year", year);
+		newSeason.addProperty("end day", dayEnd);
+		newSeason.addProperty("end month", monthEnd);
+		newSeason.addProperty("end year", yearEnd);
+		if(name.equals(newName)) {
+			seasonTree.add(name, newSeason);
+		} else {
+			jsonTree.remove(name);
+			seasonTree.add(newName, newSeason);
+		}
 		closeFW();
     }
 
