@@ -163,12 +163,12 @@ public class CommandManager extends ListenerAdapter{
 			int dayEnd = event.getOption("day2").getAsInt();
 			int monthEnd = event.getOption("month2").getAsInt();
 			int yearEnd = event.getOption("year2").getAsInt();
-			JsonBuilder.addSeason(name, day, month, year, dayEnd, monthEnd, yearEnd);
+			SeasonBuilder.addSeason(name, day, month, year, dayEnd, monthEnd, yearEnd);
 			event.reply("Season added!").queue();
 		}
 
 		if(command.equalsIgnoreCase("changeseason")) {
-			Set<String> seasons = JsonBuilder.getSeasons();
+			Set<String> seasons = SeasonBuilder.getSeasons();
 			Builder select = StringSelectMenu.create("change season");
 			for(String name : seasons) {
 				select.addOption(name, name);
@@ -186,7 +186,7 @@ public class CommandManager extends ListenerAdapter{
     public void onStringSelectInteraction(StringSelectInteractionEvent event) {
         if (event.getComponentId().equals("change season")) {
             String name = event.getValues().get(0);
-			int[] season = JsonBuilder.getSeason(name);
+			int[] season = SeasonBuilder.getSeason(name);
 			TextInput newName = TextInput.create("name", "New name", TextInputStyle.SHORT)
                     .setPlaceholder(name)
                     .build();
@@ -229,7 +229,7 @@ public class CommandManager extends ListenerAdapter{
 			String name = modalArgs[1];
 
 
-			JsonBuilder.changeSeason(name, newName, day, month, year, dayEnd, monthEnd, yearEnd);
+			SeasonBuilder.changeSeason(name, newName, day, month, year, dayEnd, monthEnd, yearEnd);
             event.reply("Thanks for your request!").setEphemeral(true).queue();
         }
     }

@@ -137,7 +137,6 @@ public class JsonBuilder {
 		jsonTree.add(name1, obj1);
 		jsonTree.add(name2, obj2);
 		
-		getFW();
 		closeFW();
 		if(remake) return; //Update the games json file for new set
 		try {
@@ -290,7 +289,6 @@ public class JsonBuilder {
     	JsonObject player = getPlayer(n);
     	name = n.toString();
     	if (player == null) return false;
-    	getFW();
 		JsonElement val = jsonParser.parse(value.toString());
 		player.add(key, val);
     	jsonTree.add(name, player);
@@ -354,7 +352,6 @@ public class JsonBuilder {
     	if (obj == null) getJson();
     	if (!jsonTree.has(name)) return false;
     	jsonTree.remove(name);
-    	getFW();
     	closeFW();
     	return true;
     }
@@ -374,7 +371,6 @@ public class JsonBuilder {
 			jsonTree.addProperty(s.toLowerCase(), name);
 		}
 		
-		getFW();
 		JsonObject newPlayer = new JsonObject();
 		//newPlayer.addProperty("name", name);
 		newPlayer.addProperty("ELO", startELO);
@@ -531,17 +527,9 @@ public class JsonBuilder {
         }
     }
 
-    private static void getFW() {
-    	try {
-    		file = new FileWriter(jsonPath);
-			//playerFile = new FileWriter(playerPath);
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    	}
-    }
-
     private static void closeFW() {
     	try {
+			file = new FileWriter(jsonPath);
     		file.write(jsonTree.toString());
 			//playerFile.write(playerTree.toString());
 			//playerFile.close();
@@ -900,60 +888,5 @@ public class JsonBuilder {
     	}
 	}
 
-    public static void addSeason(String name, int day, int month, int year, int dayEnd, int monthEnd,
-            int yearEnd) {
-		if (seasonObj == null) getJson();
-		
-		getFW();
-		JsonObject newSeason = new JsonObject();
-		newSeason.addProperty("name", name);
-		newSeason.addProperty("start day", day);
-		newSeason.addProperty("start month", month);
-		newSeason.addProperty("start year", year);
-		newSeason.addProperty("end day", dayEnd);
-		newSeason.addProperty("end month", monthEnd);
-		newSeason.addProperty("end year", yearEnd);
-		seasonTree.add(name, newSeason);
-		closeFW();
-    }
-
-	public static void changeSeason(String name, String newName, int day, int month, int year, int dayEnd, int monthEnd,
-            int yearEnd) {
-		if (seasonObj == null) getJson();
-		
-		getFW();
-		JsonObject newSeason = new JsonObject();
-		newSeason.addProperty("name", newName);
-		newSeason.addProperty("start day", day);
-		newSeason.addProperty("start month", month);
-		newSeason.addProperty("start year", year);
-		newSeason.addProperty("end day", dayEnd);
-		newSeason.addProperty("end month", monthEnd);
-		newSeason.addProperty("end year", yearEnd);
-		if(name.equals(newName)) {
-			seasonTree.add(name, newSeason);
-		} else {
-			jsonTree.remove(name);
-			seasonTree.add(newName, newSeason);
-		}
-		closeFW();
-    }
-
-	public static Set<String> getSeasons() {
-		if (seasonObj == null) getJson();
-		return seasonTree.keySet();
-	}
-
-	public static int[] getSeason(String name) {
-		if (seasonObj == null) getJson();
-		JsonObject season = seasonTree.get(name);
-		int[] ans = new int[6];
-		ans[0] = season.get("start day").getAsInt();
-		ans[1] = season.get("start month").getAsInt();
-		ans[2] = season.get("start year").getAsInt();
-		ans[3] = season.get("end day").getAsInt();
-		ans[4] = season.get("end month").getAsInt();
-		ans[5] = season.get("end year").getAsInt();
-		return ans;
-	}
+    
 }
