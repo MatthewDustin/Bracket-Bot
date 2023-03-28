@@ -11,6 +11,8 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import com.google.gson.JsonObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -28,14 +30,16 @@ public class PlayerInfo {
         return null;
     }
 
-    static void rankGraph() {
-        int[] Elos = {1400, 1050, 1120, 1100, 1040, 1200, 1600};
-        int[] times = {-10, -9, -8, -7, -6, -5, -1};
+    static boolean rankGraph(String player) {
+        StringBuilder p = new StringBuilder(player);
+        JsonObject pJson = PlayerBuilder.getPlayer(p);
+
+        int[][] timesElos = PlayerBuilder.getHistory(pJson);
         XYSeriesCollection line_chart_dataset = new XYSeriesCollection();
         String name = "player1";
         XYSeries series = new XYSeries(name);
-        for(int i = 0; i < 7; ++i){
-            series.add(times[i], Elos[i]);
+        for(int i = 0; i < timesElos.length; ++i){
+            series.add(timesElos[0][i], timesElos[1][i]);
         }
         line_chart_dataset.addSeries(series);
         JFreeChart chart = ChartFactory.createXYLineChart(
@@ -44,22 +48,17 @@ public class PlayerInfo {
             "Elo",
             line_chart_dataset
             );
-        //ChartPanel panel = new ChartPanel(chart);
+
         try {
             OutputStream out = new FileOutputStream("playergraph.png");
-            /* Dimension d = panel.getSize();
-            BufferedImage image = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g2d = image.createGraphics();
-            panel.print( g2d );
-            g2d.dispose(); */
             int width = 600; 
             int height = 400;
-            //panel.setPreferredSize(new Dimension(width, height));
             ChartUtils.writeChartAsPNG(out, chart, width, height);
             out.close();
+            return true;
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+            return false;
         }
         
     }

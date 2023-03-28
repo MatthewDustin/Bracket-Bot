@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -76,7 +77,7 @@ public class PlayerBuilder {
 		closeFW();
     }
 
-    public static void simulateSet(StringBuilder sbName1, StringBuilder sbName2, int score1, int score2, boolean online, boolean thisSeason) throws Exception {
+    public static void simulateSet(StringBuilder sbName1, StringBuilder sbName2, int score1, int score2, boolean online, boolean thisSeason, Date time) throws Exception {
 		getJson();
 		String name1 = sbName1.toString();
 		String name2 = sbName2.toString();
@@ -103,6 +104,13 @@ public class PlayerBuilder {
 			simulateGame(name2, name1, online);
 		}
 		
+		JsonArray times = playerObj1.getAsJsonArray("times");
+		times.add(time.getTime());
+		playerObj1.add("times", times);
+		JsonArray elos = playerObj1.getAsJsonArray("elos");
+		times.add(time.getTime());
+		playerObj1.add("times", times);
+
 		JsonObject matchup;
 		JsonObject matchup2;
 		if ((matchup = (JsonObject) playerObj1.get(name2)) == null) {
@@ -279,7 +287,8 @@ public class PlayerBuilder {
     		player = playerTree.get( player.getAsString());
     	} 
     	else {
-    		sb.replace(0, sb.length(), name); }
+    		sb.replace(0, sb.length(), name); 
+		}
     	return (JsonObject) player;
     }
     /*
@@ -320,8 +329,12 @@ public class PlayerBuilder {
 		newPlayer.addProperty("attendance", 0);
 		newPlayer.addProperty("lastTourney", "");
         
+		JsonArray elos = new JsonArray();
+		JsonArray times = new JsonArray();
         JsonArray m = jsonParser.parse(gson.toJson(mains)).getAsJsonArray();
         newPlayer.add("mains", m);
+		newPlayer.add("elos", elos);
+		newPlayer.add("times", times);
 		playerTree.add(name, newPlayer);
         JsonArray matchHistory = new JsonArray();
         JsonObject bestWin = new JsonObject();
@@ -341,4 +354,9 @@ public class PlayerBuilder {
 		}
 		playerWrite.close();*/
 	}
+
+
+    public static int[][] getHistory(JsonObject pJson) {
+        
+    }
 }

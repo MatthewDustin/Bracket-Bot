@@ -180,6 +180,12 @@ public class CommandManager extends ListenerAdapter{
 			
 		}
 
+		if(command.equalsIgnoreCase("playergraph")) {
+			String player = event.getOption("player").getAsString();
+			File f = ChartUtils.buff
+			event.reply
+			
+		}
 	}
 
 	@Override
@@ -247,7 +253,7 @@ public class CommandManager extends ListenerAdapter{
 		OptionData year2 = new OptionData(OptionType.INTEGER, "year2", "End Year", true);
         OptionData player1 = new OptionData(OptionType.STRING, "player1", "Player 1", true);
         OptionData player2 = new OptionData(OptionType.STRING, "player2", "Player 2", true);
-        OptionData player = new OptionData(OptionType.STRING, "player", "Player Name", true);
+        OptionData player = new OptionData(OptionType.STRING, "player", "Player Name. Defaults to you if blank.", false);
         OptionData slugLink = new OptionData(OptionType.STRING, "link", "https://www.start.gg/tournament/melee-mondays-weekly-1-picantetcg/event/melee-singles/", true);
         OptionData online = new OptionData(OptionType.BOOLEAN, "online", "Was the tournament Online?", true);
 		commandData.add(Commands.slash("changeseason", "Change a season after selecting its name."));
@@ -260,6 +266,7 @@ public class CommandManager extends ListenerAdapter{
         commandData.add(Commands.slash("restart", "Restart the bot."));
         commandData.add(Commands.slash("remake", "Remake the derived json data."));
         commandData.add(Commands.slash("shutdown", "Shutdown the bot."));
+		commandData.add(Commands.slash("playergraph", "Get an Elo graph for a player").addOptions(player));
         event.getGuild().updateCommands().addCommands(commandData).queue();
     }
 }
