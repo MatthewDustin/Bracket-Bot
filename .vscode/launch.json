@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "PlayerInfo",
+            "request": "launch",
+            "mainClass": "PlayerInfo",
+            "projectName": "ELOdatabase"
+        },
+        {
+            "type": "java",
             "name": "Launch Startgg",
             "request": "launch",
             "mainClass": "Startgg",

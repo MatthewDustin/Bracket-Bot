@@ -73,9 +73,10 @@ public class PlayerBuilder {
                 
             }
         }
+		closeFW();
     }
 
-    public static void simulateSet(StringBuilder sbName1, StringBuilder sbName2, int score1, int score2, boolean online) throws Exception {
+    public static void simulateSet(StringBuilder sbName1, StringBuilder sbName2, int score1, int score2, boolean online, boolean thisSeason) throws Exception {
 		getJson();
 		String name1 = sbName1.toString();
 		String name2 = sbName2.toString();
@@ -106,8 +107,8 @@ public class PlayerBuilder {
 		JsonObject matchup2;
 		if ((matchup = (JsonObject) playerObj1.get(name2)) == null) {
 			matchup = new JsonObject();
-			matchup.addProperty("W", score1);
-			matchup.addProperty("L", score2);
+			matchup.addProperty("W", 1);
+			matchup.addProperty("L", 0);
 		} else {
 			int w = (matchup.get("W").getAsNumber()).intValue();
 			int l = (matchup.get("L").getAsNumber()).intValue();
@@ -124,6 +125,11 @@ public class PlayerBuilder {
 			matchup2.addProperty("W", w + score2);
 			matchup2.addProperty("L", l + score1);
 		}
+		int player1Sets =  playerObj1.get("sets").getAsInt();
+		int player2Sets = playerObj2.get("sets").getAsInt();
+		playerObj1.addProperty("sets", player1Sets + 1);
+		playerObj2.addProperty("sets", player2Sets + 1);
+
 		playerObj1.add(name2, matchup);
 		playerObj2.add(name1, matchup2);
 		playerTree.add(name1, playerObj1);
@@ -136,49 +142,47 @@ public class PlayerBuilder {
 		JsonObject winner = (JsonObject) playerTree.get(name1);
 		JsonObject loser = (JsonObject) playerTree.get(name2);
 		
-		int winnerCurr = winner.get("currTourney").getAsInt();
-		int winnerLast = winner.get("currTourney").getAsInt();
-		int winnerTime;
-		if (tourneyCounts[currSeason] != winnerCurr) {
-			winnerTime = tourneyCounts[currSeason] - winnerCurr;
-			winner.addProperty("currTourney", tourneyCounts[currSeason]);
-			winner.addProperty("lastTourney", winnerCurr);
-		} else {
-			winnerTime = tourneyCounts[currSeason] - winnerLast;
-		}
-		int loserCurr = loser.get("currTourney").getAsInt();
-		int loserLast = loser.get("currTourney").getAsInt();
-		int loserTime;
-		if (tourneyCounts[currSeason] != loserCurr) {
-			loserTime = tourneyCounts[currSeason] - loserCurr;
-			loser.addProperty("currTourney", tourneyCounts[currSeason]);
-			loser.addProperty("lastTourney", loserCurr);
-		} else {
-			loserTime = tourneyCounts[currSeason] - loserLast;
-		}
-		double winnerELO = winner.get("ELO").getAsDouble();
-		double loserELO =  loser.get("ELO").getAsDouble();
-		int winnerGames =  winner.get("games").getAsInt();
-		int loserGames = loser.get("games").getAsInt();
+		String winnerTown = winner.get("town").getAsString();
+		String loserTown = loser.get("town").getAsString();
+		boolean local = winnerTown.equals(loserTown);
+		double winnerELO;
+		double loserELO;
+		
+		
+		int winnerSets =  winner.get("sets").getAsInt();
+		int loserSets = loser.get("sets").getAsInt();
 		double winnerRD =  winner.get("ELORD").getAsDouble();
 		double winnerVol = winner.get("ELOVol").getAsDouble();
 		double loserRD = loser.get("ELORD").getAsDouble();
 		double loserVol =  loser.get("ELOVol").getAsDouble();
 		//double[] newELOs = calcELO(winnerELO, loserELO, winnerRD, loserRD, winnerVol, loserVol, winnerTime, loserTime);
-		double[] newELOs = calcELO(winnerELO, loserELO, winnerGames, loserGames, online);
-		String winnerTown = winner.get("town").getAsString();
-		String loserTown = loser.get("town").getAsString();
-
-		if((!winnerLocal || loserLocal) && (loserGames > 3 || winnerGames <= 3)) {
-			winner.addProperty("ELO", newELOs[0]);
-			winner.addProperty("games", winnerGames + 1);
-			playerTree.add(name1, winner);
+		double[] newELOs;
+		if(local) {
+			winnerELO = winner.get("local ELO").getAsDouble();
+			loserELO =  loser.get("local ELO").getAsDouble();
+			newELOs = calcELO(winnerELO, loserELO, winnerSets, loserSets, online);
+			if(loserSets > 3 || winnerSets <= 3) {
+				winner.addProperty("local ELO", newELOs[0]);
+				playerTree.add(name1, winner);
+			}
+			if(winnerSets > 3 || loserSets <= 3) {
+				loser.addProperty("local ELO", newELOs[1]);
+				playerTree.add(name2, loser);
+			}
+		} else {
+			winnerELO = winner.get("state ELO").getAsDouble();
+			loserELO =  loser.get("state ELO").getAsDouble();
+			newELOs = calcELO(winnerELO, loserELO, winnerSets, loserSets, online);
+			if(loserSets > 3 || winnerSets <= 3) {
+				winner.addProperty("state ELO", newELOs[0]);
+				playerTree.add(name1, winner);
+			}
+			if(winnerSets > 3 || loserSets <= 3) {
+				loser.addProperty("state ELO", newELOs[1]);
+				playerTree.add(name2, loser);
+			}
 		}
-		if((!loserLocal || winnerLocal) && (winnerGames > 3 || loserGames <= 3)) {
-			loser.addProperty("ELO", newELOs[1]);
-			loser.addProperty("games", loserGames + 1);
-			playerTree.add(name2, loser);
-		}
+		
 	}
 
     private static double[] calcELO(double winnerELO, double loserELO, int winnerGames, int loserGames, boolean online) {
@@ -201,6 +205,9 @@ public class PlayerBuilder {
 		return ans;
 	}
 
+	/*
+     * returns false if changes failed
+     */
     public static boolean changePlayer(String name, String key, Object value) {
     	if (playerObj == null) getJson();
     	StringBuilder n = new StringBuilder(name);
@@ -303,7 +310,8 @@ public class PlayerBuilder {
 		
 		JsonObject newPlayer = new JsonObject();
 		//newPlayer.addProperty("name", name);
-		newPlayer.addProperty("ELO", startELO);
+		newPlayer.addProperty("local ELO", startELO);
+		newPlayer.addProperty("state ELO", startELO);
         newPlayer.addProperty("tier", startTier);
 		newPlayer.addProperty("sets", 0);
 		newPlayer.addProperty("town", town);
