@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -79,11 +80,10 @@ public class PlayerBuilder {
 
     public static void simulateSet(StringBuilder sbName1, StringBuilder sbName2, int score1, int score2, boolean online, boolean thisSeason, Date time) throws Exception {
 		getJson();
-		String name1 = sbName1.toString();
-		String name2 = sbName2.toString();
-		
 		JsonObject playerObj1 = getPlayer(sbName1);
 		JsonObject playerObj2 = getPlayer(sbName2);
+		String name1 = sbName1.toString();
+		String name2 = sbName2.toString();
 		if (playerObj1 == null)
 		{
 			 throw new Exception(name1);
@@ -108,9 +108,28 @@ public class PlayerBuilder {
 		times.add(time.getTime());
 		playerObj1.add("times", times);
 		JsonArray elos = playerObj1.getAsJsonArray("elos");
+		elos.add(elos);
+
 		times.add(time.getTime());
 		playerObj1.add("times", times);
 
+		if (thisSeason) {
+			JsonObject game = new JsonObject();
+			game.addProperty("opponent", name2);
+			game.addProperty("score", score1);
+			game.addProperty("total", score1 + score2);
+			JsonArray games = playerObj1.getAsJsonArray("history");
+			games.add(game);
+			playerObj1.add("history", games);
+
+			game = new JsonObject();
+			game.addProperty("opponent", name1);
+			game.addProperty("score", score2);
+			game.addProperty("total", score1 + score2);
+			games = playerObj2.getAsJsonArray("history");
+			games.add(game);
+			playerObj2.add("history", games);
+		}
 		JsonObject matchup;
 		JsonObject matchup2;
 		if ((matchup = (JsonObject) playerObj1.get(name2)) == null) {
@@ -212,6 +231,47 @@ public class PlayerBuilder {
 		
 		return ans;
 	}
+
+	public Set<Competitor> getSmithSet(String town) {
+		int n = competitorsList.size();
+	
+		// Initialize the graph
+		boolean[][] graph = new boolean[n][n];
+		for (int i = 0; i < n; i++) {
+			Competitor competitor = competitorsList.get(i);
+			for (Competitor loser : competitor.getLostTo()) {
+				int j = competitorsList.indexOf(loser);
+				graph[i][j] = true;
+			}
+		}
+	
+		// Compute the transitive closure using the Floyd–Warshall algorithm
+		for (int k = 0; k < n; k++) {
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					graph[i][j] = graph[i][j] || (graph[i][k] && graph[k][j]);
+				}
+			}
+		}
+	
+		// Find the nodes that are not reachable from any other node
+		Set<Competitor> smithSet = new HashSet<>();
+		for (int i = 0; i < n; i++) {
+			boolean isSmith = true;
+			for (int j = 0; j < n; j++) {
+				if (graph[j][i]) {
+					isSmith = false;
+					break;
+				}
+			}
+			if (isSmith) {
+				smithSet.add(competitorsList.get(i));
+			}
+		}
+	
+		return smithSet;
+	}
+	
 
 	/*
      * returns false if changes failed
@@ -355,6 +415,31 @@ public class PlayerBuilder {
 		playerWrite.close();*/
 	}
 
+	public static double hotness(StringBuilder player1, StringBuilder player2) throws Exception {
+    	if (playerObj == null) getJson();
+		JsonObject obj1 = (JsonObject) getPlayer(player1);
+		JsonObject obj2 = (JsonObject) getPlayer(player2);
+		String newname1 = player1.toString();
+		String newname2 = player2.toString();
+		if (obj1 == null) throw new Exception(newname1);
+		if (obj2 == null) throw new Exception(newname2);
+		if (player1.equals(player2)) throw new Exception("duplicate");
+		
+		double winnerELO = obj1.get("ELO").getAsDouble();
+		double loserELO = obj2.get("ELO").getAsDouble();
+		int winnerGames = (obj1.get("games").getAsNumber()).intValue();
+		int loserGames = (obj2.get("games").getAsNumber()).intValue();
+		double eloOdds = calcELO(winnerELO, loserELO, winnerGames, loserGames, false)[2];
+		JsonObject matchup = (JsonObject) obj1.get(newname2);
+		if (matchup != null) {
+			int w = (matchup.get("W").getAsNumber()).intValue();
+			double total = w + matchup.get("L").getAsDouble();
+			double realOdds = (w) / total;
+			System.out.print(realOdds + " ");
+			return 10 * (eloOdds + realOdds ) / 2; 
+		} 
+		return 10 * eloOdds;
+    }
 
     public static int[][] getHistory(JsonObject pJson) {
         
