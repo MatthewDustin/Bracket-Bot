@@ -111,9 +111,9 @@ public class CommandManager extends ListenerAdapter{
 
         if (command.equalsIgnoreCase("hotness")) {
 			try {
-                String player1 = event.getOption("player1").getAsString();
-                String player2 = event.getOption("player2").getAsString();
-				double hotness = JsonBuilder.hotness(player1, player2);
+                StringBuilder player1 = new StringBuilder(event.getOption("player1").getAsString());
+                StringBuilder player2 = new StringBuilder(event.getOption("player2").getAsString());
+				double hotness = PlayerBuilder.hotness(player1, player2);
 				System.out.println(hotness);
 				if (hotness > 4 && hotness < 6) {
 					event.reply(":fire: **" + player1 + "** vs. **" + player2 + "** is a very Hot Set!:fire:").queue(); 
