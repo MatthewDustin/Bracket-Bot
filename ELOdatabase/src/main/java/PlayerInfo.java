@@ -23,7 +23,7 @@ import javax.imageio.ImageIO;
 public class PlayerInfo {
     
     public static void main(String[] args) {
-        rankGraph();
+        rankGraph("mag");
     }
 
     static BufferedImage merger() {
@@ -36,9 +36,8 @@ public class PlayerInfo {
 
         int[][] timesElos = PlayerBuilder.getHistory(pJson);
         XYSeriesCollection line_chart_dataset = new XYSeriesCollection();
-        String name = "player1";
-        XYSeries series = new XYSeries(name);
-        for(int i = 0; i < timesElos.length; ++i){
+        XYSeries series = new XYSeries(p);
+        for(int i = 0; i < timesElos[0].length; ++i){
             series.add(timesElos[0][i], timesElos[1][i]);
         }
         line_chart_dataset.addSeries(series);

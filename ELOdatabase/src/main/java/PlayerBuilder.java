@@ -53,23 +53,12 @@ public class PlayerBuilder {
     }
 
     public static void remake() throws Exception {
-        JsonArray matchHistory = new JsonArray();
-        JsonObject bestWin = new JsonObject();
-        
         for( Entry<String, JsonElement> item : playerTree.entrySet()) {
             String name = item.getKey();
             JsonElement player = playerTree.get(name);
             if(player.isJsonObject()) {
                 JsonObject p = player.getAsJsonObject();
-                p.addProperty("ELO", startELO);
-                p.addProperty("tier", startTier);
-		        p.addProperty("sets", 0);
-		        p.addProperty("ELORD", startRD);
-		        p.addProperty("ELOVol", startVol);
-		        p.addProperty("attendance", 0);
-		        p.addProperty("lastTourney", "");
-                p.add("history", matchHistory);
-                p.add("bestWin", bestWin);
+                remakePlayer(p);
 		        playerTree.add(name, p);
                 
             }
@@ -105,11 +94,20 @@ public class PlayerBuilder {
 		}
 		
 		JsonArray times = playerObj1.getAsJsonArray("times");
-		times.add(time.getTime());
-		playerObj1.add("times", times);
 		JsonArray elos = playerObj1.getAsJsonArray("elos");
+		JsonArray stateElos = playerObj1.getAsJsonArray("state elos");
 		times.add(time.getTime());
+		elos.add(playerObj1.get("local ELO").getAsInt());
+		stateElos.add(playerObj1.get("state ELO").getAsInt());
 		playerObj1.add("times", times);
+		
+		times = playerObj2.getAsJsonArray("times");
+		elos = playerObj2.getAsJsonArray("elos");
+		stateElos = playerObj2.getAsJsonArray("state elos");
+		times.add(time.getTime());
+		elos.add(playerObj2.get("local ELO").getAsInt());
+		stateElos.add(playerObj2.get("state ELO").getAsInt());
+		playerObj2.add("times", times);
 
 		JsonObject matchup;
 		JsonObject matchup2;
@@ -318,31 +316,12 @@ public class PlayerBuilder {
 		}
 		
 		JsonObject newPlayer = new JsonObject();
-		//newPlayer.addProperty("name", name);
-		newPlayer.addProperty("local ELO", startELO);
-		newPlayer.addProperty("state ELO", startELO);
-        newPlayer.addProperty("tier", startTier);
-		newPlayer.addProperty("sets", 0);
 		newPlayer.addProperty("town", town);
-		newPlayer.addProperty("ELORD", startRD);
-		newPlayer.addProperty("ELOVol", startVol);
-		newPlayer.addProperty("attendance", 0);
-		newPlayer.addProperty("lastTourney", "");
-        
-		JsonArray elos = new JsonArray();
-		JsonArray times = new JsonArray();
-        JsonArray m = jsonParser.parse(gson.toJson(mains)).getAsJsonArray();
+		JsonArray m = jsonParser.parse(gson.toJson(mains)).getAsJsonArray();
         newPlayer.add("mains", m);
-		newPlayer.add("elos", elos);
-		newPlayer.add("times", times);
+		remakePlayer(newPlayer);
 		playerTree.add(name, newPlayer);
-        JsonArray matchHistory = new JsonArray();
-        JsonObject bestWin = new JsonObject();
-        newPlayer.add("history", matchHistory);
-        newPlayer.add("bestWin", bestWin);
-
 		closeFW();
-		
 		/*getJson();
 		if (remake) return;
 		
@@ -355,8 +334,43 @@ public class PlayerBuilder {
 		playerWrite.close();*/
 	}
 
-
-    public static int[][] getHistory(JsonObject pJson) {
+	public static void remakePlayer(JsonObject newPlayer) {
+		
+		//newPlayer.addProperty("name", name);
+		newPlayer.addProperty("local ELO", startELO);
+		newPlayer.addProperty("state ELO", startELO);
+        newPlayer.addProperty("tier", startTier);
+		newPlayer.addProperty("sets", 0);
+		
+		newPlayer.addProperty("ELORD", startRD);
+		newPlayer.addProperty("ELOVol", startVol);
+		newPlayer.addProperty("attendance", 0);
+		newPlayer.addProperty("lastTourney", "");
         
+		JsonArray elos = new JsonArray();
+		JsonArray stateElos = new JsonArray();
+		JsonArray times = new JsonArray();
+        
+		newPlayer.add("elos", elos);
+		newPlayer.add("state elos", stateElos);
+		newPlayer.add("times", times);
+		
+        JsonArray matchHistory = new JsonArray();
+        JsonObject bestWin = new JsonObject();
+        newPlayer.add("history", matchHistory);
+        newPlayer.add("bestWin", bestWin);
+		
+	}
+
+
+    public static int[][] getHistory(JsonObject p) {
+        JsonArray elos = p.get("elos").getAsJsonArray();
+		JsonArray times = p.get("times").getAsJsonArray();
+		int[][] ans = new int[2][100];
+		for(int i = 0; i < 100; ++i){
+			ans[0][i] = elos.get(i).getAsInt();
+			ans[1][i] = times.get(i).getAsInt();
+		}
+		return ans;
     }
 }

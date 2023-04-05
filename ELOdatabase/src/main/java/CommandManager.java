@@ -182,8 +182,8 @@ public class CommandManager extends ListenerAdapter{
 
 		if(command.equalsIgnoreCase("playergraph")) {
 			String player = event.getOption("player").getAsString();
-			File f = ChartUtils.buff
-			event.reply
+			File f = new File("playergraph.png");
+			event.replyFiles(FileUpload.fromData(f)).queue();
 			
 		}
 	}
