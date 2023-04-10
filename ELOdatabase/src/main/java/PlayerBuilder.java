@@ -2,6 +2,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -125,38 +126,32 @@ public class PlayerBuilder {
 			games.add(game);
 			playerObj2.add("history", games);
 		}
+		score1 = (score1 > score2) ? 1 : 0; //change scores to set count
+		score2 = 1 - score1;
 		JsonObject matchup;
-		JsonObject matchup2;
-		if ((matchup = (JsonObject) playerObj1.get(name2)) == null) {
+		JsonObject headToHead = playerObj1.getAsJsonObject("head to head");
+		if ((matchup = (JsonObject) headToHead.get(name1)) == null) {
 			matchup = new JsonObject();
-			matchup.addProperty("W", 1);
-			matchup.addProperty("L", 0);
 		} else {
-			int w = (matchup.get("W").getAsNumber()).intValue();
-			int l = (matchup.get("L").getAsNumber()).intValue();
-			matchup.addProperty("W", w + score1);
-			matchup.addProperty("L", l + score2);
+			score1 += matchup.get("W").getAsInt();
+			score2 += matchup.get("L").getAsInt();
 		}
-		if ((matchup2 = (JsonObject) playerObj2.get(name1)) == null) {
-			matchup2 = new JsonObject();
-			matchup2.addProperty("W", score2);
-			matchup2.addProperty("L", score1);
-		} else {
-			int w = (matchup2.get("W").getAsNumber()).intValue();
-			int l = (matchup2.get("L").getAsNumber()).intValue();
-			matchup2.addProperty("W", w + score2);
-			matchup2.addProperty("L", l + score1);
-		}
+		headToHead.add(name2, matchup);
+		playerObj1.add("head to head", headToHead);
+
+		JsonObject matchup2 = new JsonObject();
+		headToHead = playerObj2.getAsJsonObject("head to head");
+		matchup2.addProperty("W", score2);
+		matchup2.addProperty("L", score1);
+		headToHead.add(name1, matchup2);
+		playerObj2.add("head to head", headToHead);
+
 		int player1Sets =  playerObj1.get("sets").getAsInt();
 		int player2Sets = playerObj2.get("sets").getAsInt();
 		playerObj1.addProperty("sets", player1Sets + 1);
 		playerObj2.addProperty("sets", player2Sets + 1);
-
-		playerObj1.add(name2, matchup);
-		playerObj2.add(name1, matchup2);
 		playerTree.add(name1, playerObj1);
 		playerTree.add(name2, playerObj2);
-		
 		closeFW();
 	}
 
@@ -169,7 +164,6 @@ public class PlayerBuilder {
 		boolean local = winnerTown.equals(loserTown);
 		double winnerELO;
 		double loserELO;
-		
 		
 		int winnerSets =  winner.get("sets").getAsInt();
 		int loserSets = loser.get("sets").getAsInt();
@@ -227,16 +221,27 @@ public class PlayerBuilder {
 		return ans;
 	}
 
-	public Set<Competitor> getSmithSet(String town) {
+	public Set<String> getSmithSet(String town) {
+		ArrayList<String> competitorsList = new ArrayList<>();
+		for(Entry<String, JsonElement> item : playerTree.entrySet()) {
+			if(item.getValue().getAsJsonObject().get("town").getAsString().equalsIgnoreCase(town)) {
+				competitorsList.add(item.getKey());
+			}
+		}
 		int n = competitorsList.size();
 	
 		// Initialize the graph
 		boolean[][] graph = new boolean[n][n];
-		for (int i = 0; i < n; i++) {
-			Competitor competitor = competitorsList.get(i);
-			for (Competitor loser : competitor.getLostTo()) {
-				int j = competitorsList.indexOf(loser);
-				graph[i][j] = true;
+		for( int i = 0; i < n; i++) {
+			JsonObject competitor = playerTree.getAsJsonObject(competitorsList.get(i));
+			for (Entry<String, JsonElement> headToHeads : competitor.getAsJsonObject("head to head").entrySet()) {
+				JsonObject h2h = headToHeads.getValue().getAsJsonObject();
+				int w = h2h.get("W").getAsInt();
+				int l = h2h.get("L").getAsInt();
+				if(l > w) {
+					int j = competitorsList.indexOf(headToHeads.getKey());
+					graph[i][j] = true;
+				}
 			}
 		}
 	
@@ -250,7 +255,7 @@ public class PlayerBuilder {
 		}
 	
 		// Find the nodes that are not reachable from any other node
-		Set<Competitor> smithSet = new HashSet<>();
+		Set<String> smithSet = new HashSet<>();
 		for (int i = 0; i < n; i++) {
 			boolean isSmith = true;
 			for (int j = 0; j < n; j++) {
@@ -414,7 +419,9 @@ public class PlayerBuilder {
 		newPlayer.add("times", times);
 		
         JsonArray matchHistory = new JsonArray();
+		JsonArray headToHead = new JsonArray();
         JsonObject bestWin = new JsonObject();
+		newPlayer.add("head to head", headToHead);
         newPlayer.add("history", matchHistory);
         newPlayer.add("bestWin", bestWin);
 		
