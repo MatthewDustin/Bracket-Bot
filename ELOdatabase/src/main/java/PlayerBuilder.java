@@ -2,6 +2,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,7 +25,7 @@ public class PlayerBuilder {
     private static Object playerObj;
     private static JsonObject playerTree;
     private static FileWriter file;
-    private static String playerPath = "./Database/Players.json";
+    public static String playerPath = "./Database/Players.json";
     private static Gson gson = new Gson();
     
     private static String startTier = "D";
@@ -68,7 +69,7 @@ public class PlayerBuilder {
 		closeFW();
     }
 
-    public static void simulateSet(StringBuilder sbName1, StringBuilder sbName2, int score1, int score2, boolean online, boolean thisSeason, Date time) throws Exception {
+    public static void simulateSet(StringBuilder sbName1, StringBuilder sbName2, int score1, int score2, boolean online, boolean thisSeason, LocalDate time) throws Exception {
 		getJson();
 		JsonObject playerObj1 = getPlayer(sbName1);
 		JsonObject playerObj2 = getPlayer(sbName2);
@@ -97,14 +98,14 @@ public class PlayerBuilder {
 		JsonArray times = playerObj1.getAsJsonArray("times");
 		JsonArray elos = playerObj1.getAsJsonArray("elos");
 		JsonArray stateElos = playerObj1.getAsJsonArray("state elos");
-		times.add(time.getTime());
+		times.add(time.toString());
 		elos.add(playerObj1.get("local ELO").getAsInt());
 		stateElos.add(playerObj1.get("state ELO").getAsInt());
 		playerObj1.add("times", times);
 		times = playerObj2.getAsJsonArray("times");
 		elos = playerObj2.getAsJsonArray("elos");
 		stateElos = playerObj2.getAsJsonArray("state elos");
-		times.add(time.getTime());
+		times.add(time.toString());
 		elos.add(playerObj2.get("local ELO").getAsInt());
 		stateElos.add(playerObj2.get("state ELO").getAsInt());
 		playerObj2.add("times", times);

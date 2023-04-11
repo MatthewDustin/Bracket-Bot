@@ -9,7 +9,7 @@ J/Nicky
 J/Mute
 J/ed
 
-//motmountain42-Dec32019
+//motmountain42-12/3/2019
 simmons cam 2 0 false
 bups viber 2 1 false
 hollow slawdawg 2 0 false
@@ -42,7 +42,7 @@ duk isla 2 1 false
 savestate duk 2 1 false
 devman savestate 3 0 false
 
-//fellafridays12-may292020
+//fellafridays12-5/29/2020
 prometheus white 2 0 true
 saef johnnyvfgc 2 0 true
 roma64 pat 2 0 true
@@ -98,7 +98,7 @@ savestate pat 2 1 true
 savestate zavegg 0 2 true
 prometheus zavegg 3 0 true
 
-//motm18-dec142020
+//motm18-12/14/2020
 devman jefferson 2 0 true
 white qwest 2 0 true
 amp osmics 2 0 true

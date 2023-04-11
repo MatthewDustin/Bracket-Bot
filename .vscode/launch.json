@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TourneyBuilder",
+            "request": "launch",
+            "mainClass": "TourneyBuilder",
+            "projectName": "ELOdatabase"
+        },
+        {
+            "type": "java",
             "name": "PlayerInfo",
             "request": "launch",
             "mainClass": "PlayerInfo",
