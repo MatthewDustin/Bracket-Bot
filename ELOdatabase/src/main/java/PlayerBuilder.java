@@ -27,7 +27,7 @@ public class PlayerBuilder {
     private static FileWriter file;
     public static String playerPath = "./Database/Players.json";
     private static Gson gson = new Gson();
-    
+    public static String tiers = "SABCF";
     private static String startTier = "D";
     static final int startELO = 1000;
     static final int maxELO = 9999;
@@ -222,13 +222,76 @@ public class PlayerBuilder {
 		return ans;
 	}
 
-	public Set<String> getSmithSet(String town) {
+	public static  ArrayList<Set<String>> getAllTiers(String town) {
+		ArrayList<Set<String>> tierList = new ArrayList<Set<String>>(5);
+		for(Entry<String, JsonElement> item : playerTree.entrySet()) {
+			JsonElement p = item.getValue();
+			if(p.isJsonObject()) {
+				JsonObject player = p.getAsJsonObject();
+				if(player.get("town").getAsString().equals(town)) {
+					String name = item.getKey();
+					String tier = player.get("local tier").getAsString();
+					tierList.get(tiers.indexOf(tier)).add(name);
+				}
+			}
+		}
+		return tierList;
+	}
+
+	public static ArrayList<Set<String>> getAllTiers() {
+		ArrayList<Set<String>> tierList = new ArrayList<Set<String>>(5);
+		for(Entry<String, JsonElement> item : playerTree.entrySet()) {
+			JsonElement p = item.getValue();
+			if(p.isJsonObject()) {
+				JsonObject player = p.getAsJsonObject();
+				String name = item.getKey();
+				String tier = player.get("state tier").getAsString();
+				tierList.get(tiers.indexOf(tier)).add(name);
+			}
+		}
+		return tierList;
+	}
+
+	public static void setAllTiers(String town) {
 		ArrayList<String> competitorsList = new ArrayList<>();
 		for(Entry<String, JsonElement> item : playerTree.entrySet()) {
-			if(item.getValue().getAsJsonObject().get("town").getAsString().equalsIgnoreCase(town)) {
+			JsonElement p = item.getValue();
+			if(p.isJsonObject()) {
+				if(p.getAsJsonObject().get("town").getAsString().equals(town)) {
+					competitorsList.add(item.getKey());
+				}
+			}
+		}
+		
+		for (int i = 0; i < 5 && !competitorsList.isEmpty(); ++i) {
+			Set<String> tier = getSmithSet(competitorsList);
+			competitorsList.removeIf(n -> (tier.contains(n)));
+			for (String p : tier) {
+				JsonObject player = playerTree.getAsJsonObject(p);
+				player.addProperty("local tier", tiers.charAt(i));
+			}
+		}
+	}
+
+	public static void setAllTiers() {
+		ArrayList<String> competitorsList = new ArrayList<>();
+		for(Entry<String, JsonElement> item : playerTree.entrySet()) {
+			JsonElement p = item.getValue();
+			if(p.isJsonObject()) {
 				competitorsList.add(item.getKey());
 			}
 		}
+		for (int i = 0; i < 5 && !competitorsList.isEmpty(); ++i) {
+			Set<String> tier = getSmithSet(competitorsList);
+			competitorsList.removeIf(n -> (tier.contains(n)));
+			for (String p : tier) {
+				JsonObject player = playerTree.getAsJsonObject(p);
+				player.addProperty("state tier", tiers.charAt(i));
+			}
+		}
+	}
+
+	public static Set<String> getSmithSet(ArrayList<String> competitorsList ) {
 		int n = competitorsList.size();
 	
 		// Initialize the graph
@@ -237,16 +300,18 @@ public class PlayerBuilder {
 			JsonObject competitor = playerTree.getAsJsonObject(competitorsList.get(i));
 			for (Entry<String, JsonElement> headToHeads : competitor.getAsJsonObject("head to head").entrySet()) {
 				JsonObject h2h = headToHeads.getValue().getAsJsonObject();
-				int w = h2h.get("W").getAsInt();
-				int l = h2h.get("L").getAsInt();
-				if(l > w) {
-					int j = competitorsList.indexOf(headToHeads.getKey());
-					graph[i][j] = true;
+				int j = competitorsList.indexOf(headToHeads.getKey());
+				if(j > -1) {
+					int w = h2h.get("W").getAsInt();
+					int l = h2h.get("L").getAsInt();
+					if(l > w) {
+						graph[i][j] = true;
+					}
 				}
 			}
 		}
 	
-		// Compute the transitive closure using the Floyd–Warshall algorithm
+		// Floyd–Warshall algorithm
 		for (int k = 0; k < n; k++) {
 			for (int i = 0; i < n; i++) {
 				for (int j = 0; j < n; j++) {
@@ -402,7 +467,8 @@ public class PlayerBuilder {
 		//newPlayer.addProperty("name", name);
 		newPlayer.addProperty("local ELO", startELO);
 		newPlayer.addProperty("state ELO", startELO);
-        newPlayer.addProperty("tier", startTier);
+        newPlayer.addProperty("local tier", startTier);
+		newPlayer.addProperty("state tier", startTier);
 		newPlayer.addProperty("sets", 0);
 		
 		newPlayer.addProperty("ELORD", startRD);
@@ -420,7 +486,7 @@ public class PlayerBuilder {
 		newPlayer.add("times", times);
 		
         JsonArray matchHistory = new JsonArray();
-		JsonArray headToHead = new JsonArray();
+		JsonObject headToHead = new JsonObject();
         JsonObject bestWin = new JsonObject();
 		newPlayer.add("head to head", headToHead);
         newPlayer.add("history", matchHistory);

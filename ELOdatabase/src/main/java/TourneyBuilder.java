@@ -365,10 +365,10 @@ public class TourneyBuilder {
 							if (matches != null) {
 								tempTourney.add("matches", matches);
 								tourneyTree.add(tempTourney);
-								matches = new JsonArray();
-								tempTourney = new JsonObject();
 							}
-							tempTitle = name.split("-");
+							matches = new JsonArray();
+							tempTourney = new JsonObject();
+							tempTitle = name.split(",");
 							tempTourney.addProperty("title", tempTitle[0]);
 							time = LocalDate.parse(tempTitle[1]);
 							break;

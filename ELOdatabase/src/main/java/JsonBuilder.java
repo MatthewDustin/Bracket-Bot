@@ -67,9 +67,8 @@ public class JsonBuilder {
     	
     	System.out.println("Working Directory = " + System.getProperty("user.dir"));
     	try {
-    		//addTourney("10974919", true);
-			remakeFile();
-			//System.out.println(getRankings());
+    		String s = null);
+			System.out.println(s);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

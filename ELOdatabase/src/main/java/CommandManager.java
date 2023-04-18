@@ -1,4 +1,5 @@
 import java.io.File;
+import java.security.cert.PKIXRevocationChecker.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -68,6 +69,28 @@ public class CommandManager extends ListenerAdapter{
 
         if (command.equalsIgnoreCase("showrankings")) {
 			event.reply(JsonBuilder.getRankings()).queue();
+		}
+
+		if (command.equalsIgnoreCase("showtiers")) {
+			OptionMapping o = event.getOption("town");
+			String answer = "**Rankings for ";
+			ArrayList<Set<String>> tiers;
+			if (o != null) {
+				String town = o.getAsString();
+				answer += town + "\n\n";
+				tiers = PlayerBuilder.getAllTiers(town);
+			} else {
+				answer += "NC" + "\n\n";
+				tiers = PlayerBuilder.getAllTiers();
+			}
+			for (int i = 0; i < PlayerBuilder.tiers.length(); ++i) {
+				answer += PlayerBuilder.tiers.charAt(i) + "\n```";
+				for(String name : tiers.get(i)) {
+					answer += name + "\n";
+				}
+				answer += "```\n";
+			}
+			event.reply(answer);
 		}
 
         if (command.equalsIgnoreCase("record")) {
@@ -244,6 +267,7 @@ public class CommandManager extends ListenerAdapter{
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         List<CommandData> commandData = new ArrayList<>();
 
+		OptionData town = new OptionData(OptionType.STRING, "town", "local, regio, or city", false);
 		OptionData name = new OptionData(OptionType.STRING, "name", "Name", true);
 		OptionData month = new OptionData(OptionType.INTEGER, "month", "Month", true);
 		OptionData day = new OptionData(OptionType.INTEGER, "day", "Day", true);
@@ -262,7 +286,8 @@ public class CommandManager extends ListenerAdapter{
         commandData.add(Commands.slash("record", "Get the head-to-head record of two players.").addOptions(player1, player2));
         commandData.add(Commands.slash("hotness", "How 'HOT' would this set be? Give me two players.").addOptions(player1, player2));
         commandData.add(Commands.slash("aliases", "Get other nicknames of a player.").addOptions(player));
-        commandData.add(Commands.slash("showrankings", "Get my Elo rankings for NC players."));
+        commandData.add(Commands.slash("showrankings", "Get my Elo rankings for NC players. Provide a town for local rankings").addOptions(town));
+		commandData.add(Commands.slash("showtiers", "Get my Elo rankings for NC players. Provide a town for local tiers").addOptions(town));
         commandData.add(Commands.slash("restart", "Restart the bot."));
         commandData.add(Commands.slash("remake", "Remake the derived json data."));
         commandData.add(Commands.slash("shutdown", "Shutdown the bot."));
