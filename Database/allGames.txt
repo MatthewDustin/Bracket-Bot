@@ -1543,7 +1543,7 @@ zane walterjr 2 3 true
 mlmlop walterjr 2 3 true
 walterjr mlmlop 2 3 true
 
-//bibr3
+//bibr3,2022-03-19
 peele utensil 0 2 false
 truck jabrias 2 0 false
 ethereal p3p 2 0 false
@@ -1601,7 +1601,7 @@ regi truck 3 1 false
 devman regi 3 2 false
 simmons devman 3 1 false
 
-//bibr3busterbracket
+//bibr3busterbracket,2022-03-19
 mag lipsun 0 2 false
 jabrias rei 0 2 false
 pasta lipsun 2 0 false
@@ -1621,7 +1621,7 @@ rei rock 0 2 false
 pasta rock 3 0 false
 peele pasta 3 0 false
 
-//motm66
+//motm66,2022-03-28
 bups mag 2 0 true
 kshrubb speezo 2 1 true
 mlmlop johnnyvfgc 1 2 true
@@ -1653,7 +1653,7 @@ zane blue53 3 1 true
 bups zane 2 3 true
 zane bups 1 3 true
 
-//bibr4
+//bibr4,2022-04-17
 evan whoskite 2 0 false
 jabrias jose_cuervo 1 2 false
 keller ivever 2 1 false
@@ -1726,7 +1726,7 @@ devman duk 1 3 false
 regi duk 3 0 false
 isles regi 3 1 false
 
-//MooresvilleHouseFestMay2022
+//MooresvilleHouseFestMay2022,2022-05-21
 spuppy rock 2 0 false
 slawdawg mericc 2 0 false
 subie evan 2 0 false
@@ -1749,9 +1749,9 @@ harrison bups 3 1 false
 exposed harrison 0 3 false
 harrison exposed 1 3 false
 
-//motm67
 
-//motm68
+
+//motm68,2022-05-24
 peele jgold 2 0 true
 cam evan 2 0 true
 baconmachete rock 2 0 true
@@ -1773,7 +1773,7 @@ peele mlmlop 2 0 true
 slawdawg peele 3 0 true
 ogre slawdawg 3 0 true
 
-//Mag'sBirthday
+//Mag'sBirthday,2022-06-04
 keller jabrias 2 0 false
 jerm lipsun 2 0 false
 rock evan 2 0 false
@@ -1797,7 +1797,7 @@ pasta jerm 1 2 false
 peele jerm 2 3 false
 bups jerm 3 0 false
 
-//JohnnyRATourney
+//JohnnyRATourney,2022-06-11
 qwest mag 2 0 false
 blue53 ironbullmeat 2 0 false
 bongobeat brunky 2 0 false
@@ -1826,7 +1826,36 @@ sheuma blue53 1 3 false
 blackchris blue53 2 3 false
 blue53 blackchris 1 3 false
 
-//pandemicpanicOnline
+//motm69,2022-06-07
+whoskite jose_cuervo 1 2 true
+pelipper jose_cuervo 2 0 true
+bups rock 2 0 true
+zane keller 2 0 true
+regi jabrias 2 0 true
+truck jgold 2 0 true
+sakbal kestoro 2 1 true
+pelipper kshrubb 2 0 true
+bups zane 1 2 true
+regi peele 2 0 true
+truck sakbal 1 2 true
+pelipper zane 2 0 true
+regi sakbal 2 0 true
+pelipper regi 2 3 true
+kestoro whoskite 2 0 true
+jgold kestoro 0 2 true
+keller rock 2 1 true
+bups kestoro 2 0 true
+truck keller 2 0 true
+peele jose_cuervo 2 0 true
+truck peele 2 0 true
+sakbal bups 1 2 true
+zane truck 0 2 true
+bups truck 0 2 true
+pelipper truck 3 0 true
+regi pelipper 1 3 true
+pelipper regi 3 1 true
+
+//pandemicpanicOnline,2022-06-17
 evan mag 0 2 true
 simmons mag 2 0 true
 slawdawg kestoro 2 0 true
@@ -1856,36 +1885,7 @@ subie tormaad 3 2 true
 blue53 subie 3 0 true
 simmons blue53 3 0 true
 
-//motm69
-whoskite jose_cuervo 1 2 true
-pelipper jose_cuervo 2 0 true
-bups rock 2 0 true
-zane keller 2 0 true
-regi jabrias 2 0 true
-truck jgold 2 0 true
-sakbal kestoro 2 1 true
-pelipper kshrubb 2 0 true
-bups zane 1 2 true
-regi peele 2 0 true
-truck sakbal 1 2 true
-pelipper zane 2 0 true
-regi sakbal 2 0 true
-pelipper regi 2 3 true
-kestoro whoskite 2 0 true
-jgold kestoro 0 2 true
-keller rock 2 1 true
-bups kestoro 2 0 true
-truck keller 2 0 true
-peele jose_cuervo 2 0 true
-truck peele 2 0 true
-sakbal bups 1 2 true
-zane truck 0 2 true
-bups truck 0 2 true
-pelipper truck 3 0 true
-regi pelipper 1 3 true
-pelipper regi 3 1 true
-
-//motm70
+//motm70,2022-06-22
 kestoro keller 2 1 true
 zane jose_cuervo 2 0 true
 walterjr gobstoplobster 2 0 true
@@ -1915,7 +1915,7 @@ zane pat 2 0 true
 bups zane 2 3 true
 isla zane 3 0 true
 
-//pandemicpanicOnline2
+//pandemicpanicOnline2,2022-06-24
 walterjr kestoro 2 0 true
 ogre rock 3 0 true
 kaywayz pasta 0 3 true
@@ -1927,7 +1927,7 @@ pasta kaywayz 2 3 true
 walterjr kaywayz 3 0 true
 ogre walterjr 3 0 true
 
-//pandemicPanicOnline3
+//pandemicPanicOnline3,2022-07-01
 chastizer jgold 2 0 true
 kaywayz whoskite 2 0 true
 rock mag 2 0 true
@@ -1950,7 +1950,7 @@ mage peele 1 2 true
 blue53 peele 3 0 true
 ogre blue53 3 2 true
 
-//motm71
+//motm71,2022-07-19
 docfather p3p 2 0 true
 zane docfather 2 0 true
 docfather jose_cuervo 0 2 true
@@ -1992,7 +1992,7 @@ devman bups 3 2 true
 
 J/Gabe
 
-//motm72
+//motm72,2022-08-16
 keller jgold 2 0 true
 spizzo jabrias 2 0 true
 kaywayz evan 2 0 true
@@ -2055,7 +2055,7 @@ bups truck 3 1 true
 jabrias bups 3 0 true
 
 
-//motm73
+//motm73,2022-08-30
 keller jgold 2 0 true
 spizzo jabrias 2 0 true
 kaywayz evan 2 0 true
@@ -2102,7 +2102,7 @@ satchel sweatshorts 2 0 true
 satchel gabe 2 0 true
 tucker satchel 2 0 true
 
-//bibr5
+//bibr5,2022-09-19
 p3p evan 2 1 false
 jabrias smm 2 0 false
 spizzo sweddyspagetti 2 0 false
@@ -2180,7 +2180,7 @@ tucker duk 3 0 false
 simmons tucker 3 0 false
 isla simmons 3 2 false
 
-//motm74
+//motm74,2022-09-27
 docfather cam 2 0 true
 satchel jabrias 2 0 true
 slawdawg rei 2 0 true
@@ -2236,7 +2236,7 @@ satchel mope 1 2 true
 meat mope 3 0 true
 devman meat 3 0 true
 
-//thurstythursdaysreturn
+//thurstythursdaysreturn,2022-10-13
 satchel shocksta 1 2 true
 syched mope 2 0 true
 syched simmons 3 1 true
@@ -2247,7 +2247,7 @@ mope satchel 0 2 true
 simmons meat 3 0 true
 syched simmons 3 2 true
 
-//tbbtbibr
+//tbbtbibr,2022-10-16
 p3p evan 2 0 false
 meat p3p 2 0 false
 shenal peele 0 2 false
@@ -2279,7 +2279,7 @@ peele slawdawg 3 1 false
 bups peele 3 0 false
 meat bups 3 2 false
 
-//bibr6
+//bibr6,2022-10-17
 jgold ovengut 0 2 false
 duk mag 2 0 false
 exposed evan 2 0 false
@@ -2330,7 +2330,7 @@ meat dash 0 3 false
 simmons dash 1 3 false
 dash simmons 1 3 false
 
-//bibr6buster
+//bibr6buster,2022-10-17
 jabrias mag 2 0 false
 jgold jabrias 2 0 false
 spizzo p3p 2 1 false
@@ -2348,7 +2348,7 @@ jgold rock 2 0 false
 spizzo jgold 3 1 false
 sweatshorts spizzo 3 2 false
 
-//Oris0
+//Oris0,2022-11-05
 bups alex91 3 0 false
 peele cam 3 0 false
 slawdawg kevin 3 0 false
@@ -2365,7 +2365,7 @@ bups ogre 3 0 false
 ogre slawdawg 3 2 false
 ogre bups 1 3 false
 
-//Oris1
+//Oris1,2022-11-12
 isla alex91 2 0 false
 jgold keller 2 1 false
 gabe mork 2 0 false
@@ -2396,7 +2396,7 @@ peele duk 0 2 false
 bups duk 2 3 false
 isla duk 3 2 false
 
-//bibr7
+//bibr7,2022-11-19
 mag evan 1 2 false
 simmons evan 2 0 false
 baconmachete kevin 1 2 false
@@ -2462,7 +2462,7 @@ duk tucker 0 3 false
 isla tucker 3 0 false
 simmons isla 3 1 false
 
-//bibr7buster
+//bibr7buster,2022-11-19
 jose_cuervo whoskite 2 0 false
 rock evan 2 0 false
 jabrias mag 1 2 false
@@ -2487,7 +2487,7 @@ rock spizzo 0 1 false
 kevin spizzo 2 3 false
 spizzo kevin 1 3 false
 
-//Oris2
+//Oris2,2022-12-02
 devman jack 2 0 false
 kevin jgold 2 1 false
 peele evan 2 0 false
@@ -2520,7 +2520,7 @@ bups gabe 3 1 false
 devman bups 2 3 false
 bups devman 2 3 false
 
-//rocorumble
+//rocorumble,2022-12-18
 sigmasoldier lightrook 2 0 false
 baconmachete evan 2 0 false
 ibrisky jabrias 2 0 false
