@@ -67,22 +67,19 @@ public class JsonBuilder {
     	
     	System.out.println("Working Directory = " + System.getProperty("user.dir"));
     	try {
-    		String s = null);
-			System.out.println(s);
+    		remakeFile();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
     }
 
     
-    
-    
     public static int[] getRecord(String name1, String name2) throws Exception {
     	getJson();
     	StringBuilder newname1 = new StringBuilder(name1);
 		StringBuilder newname2 = new StringBuilder(name2);
-		JsonObject obj1 = (JsonObject) getPlayer(newname1);
-		JsonObject obj2 = (JsonObject) getPlayer(newname2);
+		JsonObject obj1 = (JsonObject) PlayerBuilder.getPlayer(newname1);
+		JsonObject obj2 = (JsonObject) PlayerBuilder.getPlayer(newname2);
 		name1 = newname1.toString();
 		name2 = newname2.toString();
 		if (obj1 == null) throw new Exception(name1);
@@ -99,92 +96,6 @@ public class JsonBuilder {
 			return record;
 		} //TODO: make this return online and offline records as well as sets
 	}
-    
-    public static ArrayList<String[]> getUpcomingMatches(String ID) throws Exception {
-    	URL url = new URL(tournyPrefix + ID + "/matches.json?api_key=" + apiKey + "&state=open");
-    	
-    	HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-    	conn.setRequestMethod("GET");
-    	conn.connect();
-
-    	int responsecode = conn.getResponseCode();
-    	
-    	if (responsecode != 200) {
-    		System.out.println(tournyPrefix + ID + "/matches.json?api_key=" + apiKey + "&state=open");
-    	    throw new RuntimeException("HttpResponseCode: " + responsecode);
-    	} else {
-    		String inline = "";
-    	    Scanner scanner = new Scanner(url.openStream());
-    	  
-    	    while (scanner.hasNext()) {
-    	       inline += scanner.nextLine();
-    	    }
-    	    
-    	    scanner.close();
-
-    	    JsonArray matches = jsonParser.parse(inline).getAsJsonArray();
-    	    ArrayList<String[]> matchIDs = new ArrayList<String[]>();
-    	    //System.out.println(Arrays.toString(matches.toArray()));
-    	    //System.out.println(matches.size());
-    	    for(int i = 0; i < matches.size(); ++i) {
-    	    	JsonObject o = (JsonObject) ((JsonObject) matches.get(i)).get("match");
-    	    	//System.out.println(((JsonObject) ((JsonObject) matches.get(i)).get("match")).keySet().toString());
-    	    	String[] temp = {o.get("player1_id").getAsString(), o.get("player2_id").getAsString(),  o.get("id").getAsString()};
-    	    	//System.out.println(Arrays.toString(temp));
-    	    	matchIDs.add(temp);
-    	    }
-    	    
-    	    for( int i = 0; i < matchIDs.size(); ++i) {
-    	    	url = new URL(tournyPrefix + ID + "/participants/" + matchIDs.get(i)[0] + ".json?api_key=" + apiKey);
-    	    	
-    	    	conn = (HttpsURLConnection) url.openConnection();
-    	    	conn.setRequestMethod("GET");
-    	    	conn.connect();
-
-    	    	responsecode = conn.getResponseCode();
-    	    	JsonObject player1;
-    	    	JsonObject player2;
-    	    	if (responsecode != 200) {
-    	    		System.out.println(tournyPrefix + ID + "/participants/" + matchIDs.get(i)[0] + ".json?api_key=" + apiKey);
-    	    	    throw new RuntimeException("HttpResponseCode: " + responsecode);
-    	    	} else {
-    	    		inline = "";
-    	    	    scanner = new Scanner(url.openStream());
-    	    	  
-    	    	    while (scanner.hasNext()) {
-    	    	       inline += scanner.nextLine();
-    	    	    }
-    	    	    scanner.close();
-
-    	    	    player1 = (JsonObject) ((JsonObject) jsonParser.parse(inline)).get("participant");
-    	    	}
-    	    	
-    	    	url = new URL(tournyPrefix + ID + "/participants/" + matchIDs.get(i)[1] + ".json?api_key=" + apiKey);
-    	    	
-    	    	conn = (HttpsURLConnection) url.openConnection();
-    	    	conn.setRequestMethod("GET");
-    	    	conn.connect();
-
-    	    	responsecode = conn.getResponseCode();
-    	    	if (responsecode != 200) {
-    	    	    throw new RuntimeException("HttpResponseCode: " + responsecode);
-    	    	} else {
-    	    		inline = "";
-    	    	    scanner = new Scanner(url.openStream());
-    	    	    while (scanner.hasNext()) {
-    	    	       inline += scanner.nextLine();
-    	    	    }
-    	    	    scanner.close();
-    	    	    player2 = (JsonObject) ((JsonObject) jsonParser.parse(inline)).get("participant");
-    	    	}
-    	    	String[] temp = { (player1.get("name").getAsString()), player2.get("name").getAsString(), matchIDs.get(i)[2] };
-    	    	matchIDs.set(i, temp);
-    	    }
-    	    return matchIDs;
-    	}
-    }
-
-    
 
     public static String getRankings() {
     	List<String> list = new ArrayList<>();
@@ -221,64 +132,10 @@ public class JsonBuilder {
     
     
     public static void remakeFile() throws Exception {
-    	PrintWriter pw = new PrintWriter(jsonPath);
-    	pw.print("{}");
-    	pw.close();
-    	getJson();
-    	File tempfile = new File(playerPath);
 		
-    	//Players added to Json from players.txt
-    	Scanner in = new Scanner(tempfile);
-		while (in.hasNextLine()) {
-			String[] aliases = {};
-			String[] line = in.nextLine().split(" ", 3);
-			if(line.length > 2) aliases = line[2].split("-");
-			PlayerBuilder.addPlayer(line[0].toLowerCase(), Boolean.valueOf(line[1]), aliases, true);
-		}
-    	in.close();
-    	
-    	tempfile = new File(gamesPath);
-    	in = new Scanner(tempfile);
-    	String[] line;
-    	while (in.hasNextLine()) {
-    		line = in.nextLine().toLowerCase().split(" ");
-    		if (line.length < 2) {
-    			if (line[0].length() > 0) {
-    				char cmd = line[0].charAt(0);  //single char commands e.g. "J/player"
-    				String name = line[0].substring(2);
-					switch (cmd) {
-						case '/':
-							++tourneyCounts[currSeason];
-							break;
-						case 'j':
-							changePlayer(name, "local", true);
-							break;
-						case 'l':
-							changePlayer(name, "local", false);
-							break;
-					}
-    			}
-    			continue;
-    		}
-    		boolean online = (line.length == 5) ? Boolean.valueOf(line[4]) : false;
-    		
-    		String name1 = line[0];
-    		String name2 = line[1]; 
-			if (name2.equals("johnny")) {
-				System.out.println();
-			}
-    		simulateSet(new StringBuilder(name1), new StringBuilder(name2), Integer.parseInt(line[2]), Integer.parseInt(line[3]), true, online);    		
-    	}
-    	in.close();
-    	
-    	//System.out.printf("%.4f ", accTotal / totalGames);
-    	//System.out.printf("%.2f%%", (100 * (double) correct) / totalGames);
-    	for (int i = 0; i < 20; ++i) {
-    		//System.out.printf("%.3f\n", (accuracy[i] / accuracy2[i]));
-    	} 
-    	for (int i = 0; i < 20; ++i) {
-    		//System.out.printf("%d\n", accuracy3[i]);
-    	}
+    	PlayerBuilder.remake();
+		TourneyBuilder.replayMatches();
+
 		System.out.println("\nRemake finished");
     }
     

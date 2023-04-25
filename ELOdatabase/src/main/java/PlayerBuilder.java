@@ -56,6 +56,7 @@ public class PlayerBuilder {
     }
 
     public static void remake() throws Exception {
+		getJson();
         for( Entry<String, JsonElement> item : playerTree.entrySet()) {
             String name = item.getKey();
             JsonElement player = item.getValue();

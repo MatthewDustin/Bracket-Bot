@@ -936,7 +936,7 @@ devman bups 3 1 false
 simmons devman 2 3 false
 devman simmons 2 3 false
 
-//pandemicPanic2
+//pandemicPanic2,2022-01-07,https://challonge.com/PandemicPanic01_07_22
 walterjr chastizer 2 0 true
 ogre kshrubb 2 0 true
 blue53 swashmello 2 1 true
@@ -964,35 +964,7 @@ blue53 ogre 3 1 true
 blackchris blue53 3 0 true
 devman blackchris 3 1 true
 
-//BIGA
-Jabrias Bobby 2 0
-Kshrubb Evan 2 0
-Peele Mag 2 0
-Kestoro JGold 2 0
-
-Bups Jabrias 2 0
-Cam Kshrubb 2 1
-Slawdawg Peele 2 0
-Speezo Kestoro 0 2
-
-Speezo Bobby 2 0
-Peele Evan 2 0
-Kshrubb Mag 2 0
-Jabrias JGold 2 0
-
-Speezo Peele 1 2
-Kshrubb Jabrias 2 0
-
-Bups Cam 2 0
-Slawdawg Kestoro 2 0
-
-Cam Peele 2 1
-Kestoro Kshrubb 0 2
-
-Bups Slawdawg 3 1
-Slawdawg Kshrubb 3 1
-
-//pandemicPanic3
+//pandemicPanic3,2022-01-14,https://challonge.com/PandemicPanic01_14_22
 bups kestoro 2 0 true
 mlmlop foolishfo0l 2 1 true
 shenal beekay71 2 1 true
@@ -1008,7 +980,7 @@ shenal mlmlop 0 2 true
 walterjr mlmlop 2 3 true
 bups mlmlop 3 0 true
 
-//SmallTownFriendlies
+//SmallTownFriendlies,2022-01-22,https://challonge.com/stfo
 sweatshorts futuris48 1 2 true
 shenal zion 2 0 true
 ibrisky keller 2 0 true
@@ -1052,7 +1024,7 @@ bups cautious 2 1 true
 zane bups 0 3 true
 satchel bups 3 2 true
 
-//motm62
+//motm62,2022-01-25,https://challonge.com/motmon62
 kshrubb sweatshorts 2 0 true
 jerm keller 2 0 true
 speezo evan 2 1 true
@@ -1097,7 +1069,7 @@ bups zane 2 0 true
 regi bups 3 1 true
 devman regi 3 2 true
 
-//pandemicPanic5
+//pandemicPanic5,2022-01-28,https://challonge.com/PandemicPanic01_28_22
 jgold foolishfo0l 0 2 true
 jabrias evan 1 2 true
 devman foolishfo0l 2 0 true
@@ -1133,58 +1105,7 @@ sneak ogre 1 2 true
 blackchris ogre 2 3 true
 devman ogre 3 0 true
 
-//superpandemicPanic3
-nogh kestoro 2 0 true
-walterjr slawdawg 1 2 true
-sake05 boris 2 0 true
-isles keller 2 0 true
-badmouth mlmlop 2 0 true
-simmons kaywayz 2 0 true
-zane ibrisky 2 0 true
-tormaad shenal 2 0 true
-videogameplayer69 peele 2 0 true
-satchel mage 2 0 true
-blue53 sweatshorts 2 0 true
-nogh slawdawg 2 0 true
-sake05 blackchris 1 2 true
-isles badmouth 2 0 true
-simmons zane 2 0 true
-siddward tormaad 2 0 true
-videogameplayer69 satchel 2 0 true
-devman blue53 2 0 true
-nogh blackchris 2 0 true
-isles simmons 1 2 true
-siddward videogameplayer69 2 1 true
-prometheus devman 2 1 true
-nogh simmons 3 1 true
-siddward prometheus 0 3 true
-nogh prometheus 3 0 true
-kestoro walterjr 0 2 true
-keller mlmlop 0 2 true
-kaywayz ibrisky 1 2 true
-peele mage 1 2 true
-blue53 walterjr 1 2 true
-satchel mlmlop 0 2 true
-tormaad ibrisky 2 0 true
-badmouth mage 2 0 true
-slawdawg sweatshorts 2 0 true
-mlmlop tormaad 0 2 true
-zane badmouth 0 2 true
-sake05 slawdawg 2 0 true
-isles walterjr 2 0 true
-blackchris tormaad 1 2 true
-devman badmouth 2 0 true
-videogameplayer69 sake05 2 0 true
-isles tormaad 3 0 true
-devman videogameplayer69 3 2 true
-siddward isles 2 3 true
-simmons devman 3 0 true
-isles simmons 3 2 true
-prometheus isles 3 0 true
-nogh prometheus 2 3 true
-prometheus nogh 0 3 true
-
-//pandemicpanic6
+//pandemicpanic6,2022-02-04,https://challonge.com/y1d2ykfs
 johnnyvfgc foolishfo0l 2 0 true
 bups johnnyvfgc 2 0 true
 mlmlop slim 1 2 true
@@ -1202,7 +1123,35 @@ bups walterjr 3 0 true
 ogre bups 1 3 true
 slim bups 3 1 true
 
-//belk6
+//BIGA,2022-02-05,https://challonge.com/99mt6cgj
+Jabrias Bobby 2 0
+Kshrubb Evan 2 0
+Peele Mag 2 0
+Kestoro JGold 2 0
+
+Bups Jabrias 2 0
+Cam Kshrubb 2 1
+Slawdawg Peele 2 0
+Speezo Kestoro 0 2
+
+Speezo Bobby 2 0
+Peele Evan 2 0
+Kshrubb Mag 2 0
+Jabrias JGold 2 0
+
+Speezo Peele 1 2
+Kshrubb Jabrias 2 0
+
+Bups Cam 2 0
+Slawdawg Kestoro 2 0
+
+Cam Peele 2 1
+Kestoro Kshrubb 0 2
+
+Bups Slawdawg 3 1
+Slawdawg Kshrubb 3 1
+
+//belk6,2022-02-09,https://challonge.com/lu2hlhnr
 Evan Petra 2 0
 Jabrias Bricc 2 0
 Bobby Mag 2 0
@@ -1254,7 +1203,7 @@ Ogre Exposed 3 1
 
 Bups Ogre 3 2
 
-//calvinshouse
+//calvinshouse,2022-02-08,https://challonge.com/h6f0p5wj
 kriskros keller 2 0 true
 peele jabrias 2 0 true
 kestoro thkyle 0 2 true
@@ -1277,7 +1226,7 @@ siddward zane 3 2 true
 bups siddward 0 3 true
 siddward bups 3 0 true
 
-//pandemicPanic7
+//pandemicPanic7,2022-02-11,https://challonge.com/PandemicPanic02_11_22
 peele rock 2 0 true
 blackchris peele 2 0 true
 walterjr shenal 2 1 true
@@ -1296,7 +1245,7 @@ harrison bups 2 3 true
 blackchris bups 2 3 true
 bups blackchris 0 3 true
 
-//motm63
+//motm63,2022-02-15,https://challonge.com/Motmon63
 qwest ibrisky 0 2 true
 mlmlop jabrias 2 0 true
 walterjr mag 2 0 true
@@ -1323,7 +1272,7 @@ bups walterjr 3 2 true
 devman bups 2 3 true
 bups devman 1 3 true
 
-//pandemicPanic8
+//pandemicPanic8,2022-02-18,https://challonge.com/PandemicPanic02_17_22
 norboar geoux 0 2 true
 shenal kestoro 1 2 true
 mlmlop rock 2 0 true
@@ -1341,7 +1290,7 @@ ogre geoux 2 1 true
 mlmlop ogre 0 2 true
 bups ogre 3 2 true
 
-//bibr2
+//bibr2,2022-02-19,https://challonge.com/6pc69ze3
 Peele ImDolfin 2 1
 Sakbal Keller 2 0
 Slawdawg Mag 2 0
@@ -1404,7 +1353,7 @@ Pelipper Polecat 3 1
 
 Simmons Pelipper 3 1
 
-//bibr2busterbracket
+//bibr2busterbracket,2022-02-19,https://challonge.com/bibr2bust
 Jgold rock 1 2
 norboar jabrias 0 2
 joe imdolfin 2 1
@@ -1419,7 +1368,7 @@ keller imdolfin 1 3
 joe imdolfin 2 3
 imdolfin joe 1 3
 
-//belk7
+//belk7,2022-02-23,https://challonge.com/85snwmne
 P3P Jabrias 2 0
 JGold SMM 2 0
 Mag Marge 2 0
@@ -1468,7 +1417,58 @@ Exposed Slawdawg 3 1
 Exposed Bups 3 2
 Exposed Bups 3 0
 
-//motm64
+//superpandemicPanic3,2022-02-26
+nogh kestoro 2 0 true
+walterjr slawdawg 1 2 true
+sake05 boris 2 0 true
+isles keller 2 0 true
+badmouth mlmlop 2 0 true
+simmons kaywayz 2 0 true
+zane ibrisky 2 0 true
+tormaad shenal 2 0 true
+videogameplayer69 peele 2 0 true
+satchel mage 2 0 true
+blue53 sweatshorts 2 0 true
+nogh slawdawg 2 0 true
+sake05 blackchris 1 2 true
+isles badmouth 2 0 true
+simmons zane 2 0 true
+siddward tormaad 2 0 true
+videogameplayer69 satchel 2 0 true
+devman blue53 2 0 true
+nogh blackchris 2 0 true
+isles simmons 1 2 true
+siddward videogameplayer69 2 1 true
+prometheus devman 2 1 true
+nogh simmons 3 1 true
+siddward prometheus 0 3 true
+nogh prometheus 3 0 true
+kestoro walterjr 0 2 true
+keller mlmlop 0 2 true
+kaywayz ibrisky 1 2 true
+peele mage 1 2 true
+blue53 walterjr 1 2 true
+satchel mlmlop 0 2 true
+tormaad ibrisky 2 0 true
+badmouth mage 2 0 true
+slawdawg sweatshorts 2 0 true
+mlmlop tormaad 0 2 true
+zane badmouth 0 2 true
+sake05 slawdawg 2 0 true
+isles walterjr 2 0 true
+blackchris tormaad 1 2 true
+devman badmouth 2 0 true
+videogameplayer69 sake05 2 0 true
+isles tormaad 3 0 true
+devman videogameplayer69 3 2 true
+siddward isles 2 3 true
+simmons devman 3 0 true
+isles simmons 3 2 true
+prometheus isles 3 0 true
+nogh prometheus 2 3 true
+prometheus nogh 0 3 true
+
+//motm64,2022-03-01,https://challonge.com/t0epmvlv/log
 kestoro jefferson 2 0 true
 slawdawg mericc 2 0 true
 ibrisky peele 2 0 true
@@ -1491,7 +1491,7 @@ bups slawdawg 2 1 true
 zane bups 1 2 true
 blackchris bups 3 0 true
 
-//PandemicPanic9
+//PandemicPanic9,2022-03-04
 rock foolishfo0l 0 2 true
 chastizer evan 2 0 true
 harrison foolishfo0l 2 0 true
@@ -1511,8 +1511,7 @@ peele kshrubb 1 2 true
 walterjr kshrubb 2 3 true
 harrison kshrubb 3 0 true
 
-//PandemicPanic10
-//motm65
+//motm65,2022-03-15
 keller qwest 0 2 true
 kshrubb rei 2 0 true
 pasta bobby 2 0 true
