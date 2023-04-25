@@ -521,7 +521,7 @@ public class PlayerBuilder {
 		return 10 * eloOdds;
     }
 
-    public static int[][] getHistory(JsonObject p) {
+    /*public static int[][] getHistory(JsonObject p) {
         JsonArray elos = p.get("elos").getAsJsonArray();
 		JsonArray times = p.get("times").getAsJsonArray();
 		int[][] ans = new int[2][100];
@@ -530,5 +530,5 @@ public class PlayerBuilder {
 			ans[1][i] = times.get(i).getAsInt();
 		}
 		return ans;
-    }
+    }*/
 }

@@ -200,7 +200,6 @@ public class CommandManager extends ListenerAdapter{
 			event.reply("Choose a season")
                 .addActionRow(select.build())
                 .queue();
-			
 		}
 
 		if(command.equalsIgnoreCase("playergraph")) {
