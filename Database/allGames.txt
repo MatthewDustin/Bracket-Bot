@@ -1992,26 +1992,6 @@ devman bups 3 2 true
 J/Gabe
 
 //motm72,2022-08-16
-keller jgold 2 0 true
-spizzo jabrias 2 0 true
-kaywayz evan 2 0 true
-peele ibrisky 2 0 true
-sweatshorts rock 2 0 true
-gritty mag 2 0 true
-gabe slawdawg 2 0 true
-bups spizzo 2 0 true
-regi peele 2 1 true
-gritty jgold 2 0 true
-qwest jabrias 2 0 true
-peele evan 2 0 true
-kaywayz ibrisky 2 1 true
-slawdawg rock 2 0 true
-keller mag 2 0 true
-sweatshorts gritty 2 1 true
-qwest peele 0 2 true
-kaywayz spizzo 0 2 true
-slawdawg keller 2 0 true
-gabe peele 2 0 true
 chastizer pasta 1 2 true
 mlmlop p3p 2 0 true
 satchel mag 2 0 true
@@ -2021,18 +2001,18 @@ gritty jgold 2 0 true
 slawdawg jabrias 2 0 true
 qwest mericc 2 0 true
 sweatshorts rock 2 1 true
-jabrias pasta 2 0 true
+ihopdan pasta 2 0 true
 mlmlop satchel 1 2 true
 truck gabe 2 0 true
 zane blue53 2 1 true
 bongobeat slawdawg 0 2 true
 bups qwest 2 1 true
 ogre sweatshorts 2 0 true
-jabrias satchel 2 0 true
+ihopdan satchel 2 0 true
 truck zane 2 1 true
 bups ogre 2 1 true
-jabrias truck 2 0 true
-jabrias bups 3 2 true
+ihopdan truck 2 0 true
+ihopdan bups 3 2 true
 p3p mag 2 0 true
 sweatshorts chastizer 2 1 true
 qwest p3p 2 0 true
@@ -2051,7 +2031,7 @@ zane satchel 2 1 true
 ogre slawdawg 2 0 true
 truck ogre 2 0 true
 bups truck 3 1 true
-jabrias bups 3 0 true
+ihopdan bups 3 0 true
 
 
 //motm73,2022-08-30

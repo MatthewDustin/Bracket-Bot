@@ -69,8 +69,8 @@ public class Startgg {
         int id2 = entrant2.get("id").getAsInt();
         StringBuilder sbname1 = new StringBuilder(entrant1.get("name").getAsString());
         StringBuilder sbname2 = new StringBuilder(entrant2.get("name").getAsString());
-        JsonBuilder.getPlayer(sbname1);
-        JsonBuilder.getPlayer(sbname2);
+        PlayerBuilder.getPlayer(sbname1);
+        PlayerBuilder.getPlayer(sbname2);
         if (Lscore > Wscore) {
           int t = Lscore;
           Lscore = Wscore;

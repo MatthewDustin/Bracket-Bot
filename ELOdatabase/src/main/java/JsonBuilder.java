@@ -74,30 +74,9 @@ public class JsonBuilder {
     }
 
     
-    public static int[] getRecord(String name1, String name2) throws Exception {
-    	getJson();
-    	StringBuilder newname1 = new StringBuilder(name1);
-		StringBuilder newname2 = new StringBuilder(name2);
-		JsonObject obj1 = (JsonObject) PlayerBuilder.getPlayer(newname1);
-		JsonObject obj2 = (JsonObject) PlayerBuilder.getPlayer(newname2);
-		name1 = newname1.toString();
-		name2 = newname2.toString();
-		if (obj1 == null) throw new Exception(name1);
-		if (obj2 == null) throw new Exception(name2);
-		if (name1.equals(name2)) throw new Exception("duplicate");
-		JsonObject matchup = (JsonObject) obj1.get(name2);
-		if (matchup == null) {
-			throw new Exception("none");
-		} else {
-			int[] record = new int[3];
-			record[1] = (matchup.get("W").getAsNumber()).intValue();
-			record[2] = (matchup.get("L").getAsNumber()).intValue();
-			record[0] = record[1] + record[2];
-			return record;
-		} //TODO: make this return online and offline records as well as sets
-	}
+    
 
-    public static String getRankings() {
+    public static String getRankings(String town) {
     	List<String> list = new ArrayList<>();
     	if (obj == null) getJson();
     	for (String key : jsonTree.keySet()) {
@@ -134,31 +113,13 @@ public class JsonBuilder {
     public static void remakeFile() throws Exception {
 		
     	PlayerBuilder.remake();
+		TourneyBuilder.getPlayersFromMatches();
 		TourneyBuilder.replayMatches();
 
 		System.out.println("\nRemake finished");
     }
     
-    public static String getAliases(String name) throws Exception {
-    	if (obj == null) getJson();
-		if (jsonTree.get(name).isJsonPrimitive()) name = jsonTree.get(name).getAsString();
-    	File tempfile = new File(playerPath);
-    	Scanner in = new Scanner(tempfile);
-    	while (in.hasNextLine()) {
-			String[] line = in.nextLine().split(" ");
-			if(line[0].equalsIgnoreCase(name)) {
-				String ans = name;
-				if (line.length > 2) {
-					for (String s : line[2].split("-")) {
-						ans += ", " + s;
-					}
-				}
-				return ans;
-			}
-		}
-    	in.close();
-    	throw new Exception("none");
-    }
+    
     
     public static void getJson() {
     	try {

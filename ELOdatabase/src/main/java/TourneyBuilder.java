@@ -7,24 +7,35 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.text.DateFormat;
 import java.time.LocalDate;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import javax.net.ssl.HttpsURLConnection;
-
+import java.util.Set;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
 
 public class TourneyBuilder {
     static final String tournyPrefix = "https://api.challonge.com/v1/tournaments/";
-    static final String apiKey = "aGisuEsmAPAHak253ewV65RiCxRCwUnR8iFkIak8";
-    static final String apiKeyStart = "220406d16d278620593e1af51a6201bb";
+    static String apiKey;
+    static String apiKeyStart;
 	private static String tourneyPath = "./Database/Tourneys.json";
 	private static String changesPath = "./Database/userHistory.json";
 	private static Object tourneyObj;
@@ -36,24 +47,122 @@ public class TourneyBuilder {
 
 	public static void main(String[] args) {
 		try {
+			getPlayersFromMatches();
 			//playersTxtToJson();
-			txtToJson();
+			//txtToJson();
+			//addTourneyStart("tournament/buddwaur-s-birthday-bash-3-holiday-edition/event/melee-singles", "bbb3", false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-    public static void remakeTourneys() {
-    	
+    public static void addTourney(String link, String ID, String name, boolean online, LocalDate time, JsonArray tourneyMatches) {
+    	JsonObject tourney = new JsonObject();
+		tourney.addProperty("link", link);
+		tourney.addProperty("id", ID);
+		tourney.addProperty("time", time.toString());
+		tourney.addProperty("online", online);
+		tourney.addProperty("title", name);
+		tourney.add("matches", tourneyMatches);
+		if(tourneyTree.size() >= 1) {
+			JsonArray tempTree = new JsonArray(tourneyTree.size() + 1);
+			Iterator<JsonElement> treeCurs = tourneyTree.iterator();
+			JsonObject tempTourney = treeCurs.next().getAsJsonObject();
+			LocalDate tempDate = LocalDate.parse(tempTourney.get("time").getAsString());
+			while(treeCurs.hasNext() && time.isAfter(tempDate)) {
+				tempTree.add(tempTourney);
+				tempTourney = treeCurs.next().getAsJsonObject();
+				tempDate = LocalDate.parse(tempTourney.get("time").getAsString());
+			}
+			if(time.isAfter(tempDate)) {
+				tempTree.add(tempTourney);
+				tempTourney = null;
+			}
+			tempTree.add(tourney);
+			while(treeCurs.hasNext()) {
+				tempTree.add(tempTourney);
+				tempTourney = treeCurs.next().getAsJsonObject();
+			}
+			if(tempTourney != null)
+				tempTree.add(tempTourney);
+			tourneyTree = tempTree;
+		} else {
+			tourneyTree.add(tourney);
+		}
+		closeFW();
     }
 
-    public static void addTourney(String ID, boolean online) throws Exception {
-		URL url = new URL(tournyPrefix + ID + "/matches.json?api_key=" + apiKey + "&state=complete");
+
+
+	public static void addTourneyStart(String link, String name, boolean online) throws Exception {
+		if (tourneyObj == null) getJson();
+		JsonArray tourneyMatches = new JsonArray();
+		JsonParser jsonParser = new JsonParser();
+		
+		OkHttpClient client = new OkHttpClient().newBuilder()  //Postman code.
+        										.build();
+    	String pages = "1";
+    	String perPage = "100";
+    	MediaType mediaType = MediaType.parse("application/json");
+    	String json = "{\"query\":\"query EventSets($eventSlug: String!, $page: Int!, $perPage: Int!) {\\r\\n  event(slug: $eventSlug) {\\r\\n    id\\r\\n    startAt\\r\\n    name\\r\\n    sets(\\r\\n      page: $page\\r\\n      perPage: $perPage\\r\\n      sortType: STANDARD\\r\\n    ) {\\r\\n      pageInfo {\\r\\n        total\\r\\n      }\\r\\n      nodes {\\r\\n        id\\r\\n        winnerId\\r\\n        displayScore\\r\\n        totalGames\\r\\n        slots {\\r\\n          id\\r\\n          entrant {\\r\\n            id\\r\\n            name\\r\\n          }\\r\\n        }\\r\\n      }\\r\\n    }\\r\\n  }\\r\\n},\",\"variables\":{\"eventSlug\":\""+ link + "\",\"page\":" + pages + ",\"perPage\":"+ perPage +"}}";
+    	RequestBody body = RequestBody.create(mediaType, json);
+    	Request request = new Request.Builder()
+    	  .url("https://api.smash.gg/gql/alpha")
+    	  .method("POST", body)
+    	  .addHeader("Authorization", "Bearer " + apiKeyStart)
+    	  .addHeader("Content-Type", "application/json")
+    	  .build();
+    	Response response = client.newCall(request).execute(); //end of Postman code
+		String jsonResponse = response.body().string();	
+    	//System.out.println(jsonResponse);
     	
+		JsonObject event = jsonParser.parse(jsonResponse).getAsJsonObject().get("data").getAsJsonObject().get("event").getAsJsonObject();
+		long id = event.get("id").getAsLong();
+		long unixStartAt = event.get("startAt").getAsLong() * 1000;
+		LocalDate tourneyStart = Instant.ofEpochMilli(unixStartAt).atZone(ZoneId.systemDefault()).toLocalDate();
+    	JsonArray sets = event.get("sets").getAsJsonObject().get("nodes").getAsJsonArray();
+    	for(JsonElement set : sets) {
+    		JsonObject setO = set.getAsJsonObject();
+    		String scoreLine = setO.get("displayScore").getAsString();
+    		if (scoreLine.equals("DQ")) {
+    			continue;
+    		}
+    		//String winnerID = setO.get("winnerId").getAsString();
+    		//int games = setO.get("totalGames").getAsInt();
+    		int Lscore = Character.getNumericValue(scoreLine.charAt(scoreLine.length()-1));
+    		int Wscore = Character.getNumericValue(scoreLine.charAt(scoreLine.indexOf(" - ") - 1));
+		
+    		JsonObject entrant1 = setO.get("slots").getAsJsonArray().get(0).getAsJsonObject().get("entrant").getAsJsonObject();
+    		JsonObject entrant2 = setO.get("slots").getAsJsonArray().get(1).getAsJsonObject().get("entrant").getAsJsonObject();
+    		//int id1 = entrant1.get("id").getAsInt();
+    		//int id2 = entrant2.get("id").getAsInt();
+    		String name1 = entrant1.get("name").getAsString();
+    		String name2 = entrant2.get("name").getAsString();
+    		if (Lscore > Wscore) {
+    			int t = Lscore;
+    			Lscore = Wscore;
+    			Wscore = t;
+    			String tempName = name1;
+    			name1 = name2;
+    			name2 = tempName;
+    		}
+			JsonObject match = new JsonObject();
+			match.addProperty("name1", name1);
+			match.addProperty("name2", name2);
+			match.addProperty("score1", Wscore);
+			match.addProperty("score2", Lscore);
+    		tourneyMatches.add(match);
+    	}
+		
+		addTourney(link, String.valueOf(id), name, online, tourneyStart, tourneyMatches);
+	}
+
+    public static void addTourneyChallonge(String ID, String name, boolean online, String link) throws Exception {
+		getJson();
+		URL url = new URL(tournyPrefix + ID + "/matches.json?api_key=" + apiKey + "&state=complete");
     	HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
     	conn.setRequestMethod("GET");
     	conn.connect();
-
     	int responsecode = conn.getResponseCode();
     	
     	if (responsecode != 200) {
@@ -62,100 +171,94 @@ public class TourneyBuilder {
     	} else {
     		String inline = "";
     	    Scanner scanner = new Scanner(url.openStream());
-    	  
     	    while (scanner.hasNext()) {
     	       inline += scanner.nextLine();
     	    }
-    	    
     	    scanner.close();
 
     	    JsonArray matches = (JsonArray) JsonBuilder.jsonParser.parse(inline);
-    	    ArrayList<String[]> names = new ArrayList<String[]>();
-    	    ArrayList<Integer[]> scores = new ArrayList<Integer[]>();
-    	    //System.out.println(Arrays.toString(matches.toArray()));
-    	    //System.out.println(matches.size());
-    	    for(int i = 0; i < matches.size(); ++i) {
-    	    	JsonObject o = (JsonObject) ((JsonObject) matches.get(i)).get("match");
-    	    	//System.out.println(((JsonObject) ((JsonObject) matches.get(i)).get("match")).keySet().toString());
-    	    	String[] temp = {o.get("player1_id").getAsString(), o.get("player2_id").getAsString()};
-    	    	//System.out.println(Arrays.toString(temp));
-    	    	String scoreTemp = o.get("scores_csv").getAsString();
-    	    	if (scoreTemp.length() == 3) {
-    	    		Integer[] temp2 = {scoreTemp.charAt(0) - '0', scoreTemp.charAt(2) - '0'};
-    	    		scores.add(temp2);
-    	    	} else {
-    	    		scores.add( new Integer[] {0, 0} );
-    	    	}
-    	    	
-    	    	names.add(temp);
-    	    	
-    	    }
-    	    
-    	    for( int i = 0; i < names.size(); ++i) {
-    	    	url = new URL(tournyPrefix + ID + "/participants/" + names.get(i)[0] + ".json?api_key=" + apiKey);
-    	    	
-    	    	conn = (HttpsURLConnection) url.openConnection();
-    	    	conn.setRequestMethod("GET");
-    	    	conn.connect();
 
-    	    	responsecode = conn.getResponseCode();
-    	    	JsonObject player1;
-    	    	JsonObject player2;
-    	    	if (responsecode != 200) {
-    	    		System.out.println(tournyPrefix + ID + "/participants/" + names.get(i)[0] + ".json?api_key=" + apiKey);
-    	    	    throw new RuntimeException("HttpResponseCode: " + responsecode);
-    	    	} else {
-    	    		inline = "";
-    	    	    scanner = new Scanner(url.openStream());
-    	    	  
-    	    	    while (scanner.hasNext()) {
-    	    	       inline += scanner.nextLine();
-    	    	    }
-    	    	    scanner.close();
-
-    	    	    player1 = (JsonObject) ((JsonObject) JsonBuilder.jsonParser.parse(inline)).get("participant");
-    	    	}
+			url = new URL(tournyPrefix + ID + "/participants.json?api_key=" + apiKey);
     	    	
-    	    	url = new URL(tournyPrefix + ID + "/participants/" + names.get(i)[1] + ".json?api_key=" + apiKey);
-    	    	
-    	    	conn = (HttpsURLConnection) url.openConnection();
-    	    	conn.setRequestMethod("GET");
-    	    	conn.connect();
+			conn = (HttpsURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.connect();
+			responsecode = conn.getResponseCode();
 
-    	    	responsecode = conn.getResponseCode();
-    	    	if (responsecode != 200) {
-    	    	    throw new RuntimeException("HttpResponseCode: " + responsecode);
-    	    	} else {
-    	    		inline = "";
-    	    	    scanner = new Scanner(url.openStream());
-    	    	    while (scanner.hasNext()) {
-    	    	       inline += scanner.nextLine();
-    	    	    }
-    	    	    scanner.close();
-    	    	    player2 = (JsonObject) ((JsonObject) JsonBuilder.jsonParser.parse(inline)).get("participant");
-    	    	}
-    	    	String[] temp = {player1.get("name").getAsString().toLowerCase(), (String)player2.get("name").getAsString().toLowerCase()};
-    	    	names.set(i, temp);
-    	    }
-    	    
-    	    String msg = null;
-    	    for(int i = 0; i < scores.size(); ++i) {
-    	    	try {
-    	    		String name1 = names.get(i)[0];
-    	    		String name2 = names.get(i)[1];
-    	    		//PlayerBuilder.simulateSet(new StringBuilder(name1), new StringBuilder(name2), scores.get(i)[0], scores.get(i)[1], false, online);
-    	    	}
-    	    	catch (Exception e) {
-    	    		msg = e.getMessage();
-    	    		if(msg == null) {
-    	    			throw e;
-    	    		} else {
-    	    			System.out.println(names.get(i)[0] + " " + names.get(i)[1] + " " + scores.get(i)[0] + " " + scores.get(i)[1]);
-    	    			System.out.println("\t\t\tError:\t" + msg);
-    	    		}
-    	    	}
-    	    }
-    	    if (msg != null) throw new Exception(msg);
+			if (responsecode != 200) {
+				System.out.println(tournyPrefix + ID + "/participants.json?api_key=" + apiKey);
+				throw new RuntimeException("HttpResponseCode: " + responsecode);
+			} else {
+				inline = "";
+				scanner = new Scanner(url.openStream());
+				while (scanner.hasNext()) {
+				   inline += scanner.nextLine();
+				}
+				scanner.close();
+
+				LocalDate dateObj = LocalDate.parse( matches.get(0).getAsJsonObject().get("match").getAsJsonObject().get("started_at").getAsString().substring(0, 10));
+				JsonArray participants = JsonBuilder.jsonParser.parse(inline).getAsJsonArray();
+				HashMap<String, String> nameMap = new HashMap<String, String>();
+				for( int k = 0; k < participants.size(); ++k) {
+					JsonObject p = participants.get(k).getAsJsonObject().get("participant").getAsJsonObject();
+					String pName = p.get("name").getAsString();
+					String pID = p.get("id").getAsString();
+					JsonArray groups = (JsonArray)p.get("group_player_ids");
+					if(groups != null) {
+						for (JsonElement g : groups) {
+							nameMap.put(g.getAsString(), pName);
+						}
+					}
+					nameMap.put(pID, pName);
+				}
+
+				ArrayList<String[]> names = new ArrayList<String[]>();
+				ArrayList<Integer[]> scores = new ArrayList<Integer[]>();
+				//System.out.println(Arrays.toString(matches.toArray()));
+				//System.out.println(matches.size());
+				for(int i = 0; i < matches.size(); ++i) {
+					JsonObject o = (JsonObject) ((JsonObject) matches.get(i)).get("match");
+					//System.out.println(((JsonObject) ((JsonObject) matches.get(i)).get("match")).keySet().toString());
+					String[] temp = {nameMap.get(o.get("player1_id").getAsString()), nameMap.get(o.get("player2_id").getAsString())};
+					//System.out.println(Arrays.toString(temp));
+					String scoreTemp = o.get("scores_csv").getAsString();
+					//System.out.println("scores: " + scoreTemp);
+					Integer[] temp2 = {scoreTemp.charAt(0) - '0', scoreTemp.charAt(2) - '0'};
+					if (scoreTemp.length() == 3 && temp2[0] + temp2[1] > 0) {
+						
+						scores.add(temp2);
+						names.add(temp);
+					} 
+				}
+				JsonArray tourneyMatches = new JsonArray();
+				String msg = null;
+				for(int i = 0; i < scores.size(); ++i) {
+					try {
+						String name1 = names.get(i)[0];
+						String name2 = names.get(i)[1];
+						int score1 = scores.get(i)[0];
+						int score2 = scores.get(i)[1];
+						//PlayerBuilder.simulateSet(newname1, newname2, score1, score2, online, dateObj);
+						JsonObject match = new JsonObject();
+						match.addProperty("name1", name1);
+						match.addProperty("name2", name2);
+						match.addProperty("score1", score1);
+						match.addProperty("score2", score2);
+						tourneyMatches.add(match);
+					}
+					catch (Exception e) {
+						msg = e.getMessage();
+						if(msg == null) {
+							throw e;
+						} else {
+							System.out.println(names.get(i)[0] + " " + names.get(i)[1] + " " + scores.get(i)[0] + " " + scores.get(i)[1]);
+							System.out.println("\t\t\tError:\t" + msg);
+						}
+					}
+				}
+				if (msg != null) throw new Exception(msg);
+				addTourney(link, ID, name, online, dateObj, tourneyMatches);
+			}
     	}
 	}
 
@@ -280,29 +383,62 @@ public class TourneyBuilder {
     	    
 	}
 
+	public static void getPlayersFromMatches() throws Exception {
+		if (tourneyObj == null) getJson();
+		for(JsonElement t : tourneyTree) {
+			JsonObject nameChanges = new JsonObject();
+			JsonObject tourney = t.getAsJsonObject();
+			for (JsonElement match : tourney.get("matches").getAsJsonArray()) {
+				JsonObject m = match.getAsJsonObject();
+				String name1 = m.get("name1").getAsString();
+				String name2 = m.get("name2").getAsString();
+				StringBuilder tempName1 = new StringBuilder(name1);
+				StringBuilder tempName2 = new StringBuilder(name2);
+				PlayerBuilder.getPlayer(tempName1);
+				PlayerBuilder.getPlayer(tempName2);
+				if(!tempName1.toString().equals(name1)) {
+					m.addProperty("name1", tempName1.toString());
+					nameChanges.addProperty(tempName1.toString(), name1);
+				}
+				if(!tempName2.toString().equals(name2)) {
+					m.addProperty("name2", tempName2.toString());
+					nameChanges.addProperty(tempName2.toString(), name2);
+				}
+			}
+			tourney.add("name changes", nameChanges);
+			closeFW();
+		}
+		
+	}
+
 	public static void replayMatches() throws Exception {
 		getJson();
 		Iterator<JsonElement> changes = changesTree.iterator();
 		JsonArray change = changes.next().getAsJsonArray();
-		LocalDate seasonStart = LocalDate.now().minusMonths(6);
 		LocalDate time = LocalDate.parse("2001-02-02");
 		LocalDate changesTime = LocalDate.parse(change.get(0).getAsString());
 		Boolean online;
-		Boolean thisSeason = false;
+		Set<String> missingPlayers = new HashSet<String>();
+
 		for(JsonElement t : tourneyTree) {
 			JsonObject tourney = t.getAsJsonObject();
 			time = LocalDate.parse(tourney.get("time").getAsString());
-			if (time.isAfter(seasonStart)) {
-				thisSeason = true;
-			}
 			online = tourney.get("online").getAsBoolean();
-			while(time.isAfter(changesTime) && changes.hasNext()) {
+			while(time.isAfter(changesTime)) {
 				String name = change.get(1).getAsString();
 				String property = change.get(2).getAsString();
 				String value = change.get(3).getAsString();
 				PlayerBuilder.changePlayer(name, property, value);
-				change = changes.next().getAsJsonArray();
-				changesTime = LocalDate.parse(change.get(0).getAsString());
+				/*if(property.equals("town")) {
+					JsonArray elos = new JsonArray();
+					PlayerBuilder.changePlayer(name, "elos", elos);
+				}*/
+				if(changes.hasNext()){
+					change = changes.next().getAsJsonArray();
+					changesTime = LocalDate.parse(change.get(0).getAsString());
+				} else {
+					changesTime = LocalDate.now();
+				}
 			}
 			JsonArray matches = tourney.getAsJsonArray("matches");
 			for(JsonElement m : matches) {
@@ -311,8 +447,15 @@ public class TourneyBuilder {
 				String name2 = match.get("name2").getAsString(); 
 				int score1 = match.get("score1").getAsInt();
 				int score2 = match.get("score2").getAsInt();
-				PlayerBuilder.simulateSet(new StringBuilder(name1), new StringBuilder(name2), score1, score2, online, thisSeason, time);
+				try {
+					PlayerBuilder.simulateSet(new StringBuilder(name1), new StringBuilder(name2), score1, score2, online, time);
+				} catch(Exception e) {
+					missingPlayers.add(e.getMessage());
+				}
 			}
+		}
+		for(String err : missingPlayers) {
+			System.out.println("Error in replays: " + err);
 		}
 	}
 
